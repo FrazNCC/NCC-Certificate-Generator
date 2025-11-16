@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NCC Certificate Generator</title>
+    <title>Certificate Generator - Professional</title>
     <style>
         * {
             margin: 0;
@@ -168,21 +168,6 @@
             background: white;
         }
 
-        .file-upload {
-            border: 3px dashed #667eea;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            background: #f8f9fa;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload:hover {
-            background: #e9ecef;
-            border-color: #764ba2;
-        }
-
         .file-upload input[type="file"] {
             display: none;
         }
@@ -293,12 +278,6 @@
             border: 1px solid #c3e6cb;
         }
 
-        .status-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
         @media (max-width: 768px) {
             .tab-content {
                 padding: 20px;
@@ -328,7 +307,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>NCC Certificate Generator</h1>
+            <h1>🎓 Certificate Generator</h1>
             <p>Professional Certificate Generation - Single or Bulk Mode</p>
         </div>
 
@@ -397,7 +376,6 @@
                 <button id="downloadSampleBtn" class="btn btn-secondary">📥 Download Sample CSV</button>
             </div>
 
-            <!-- Simple File Input -->
             <div style="margin-bottom: 20px;">
                 <input type="file" id="csvFile" accept=".csv" style="display: block; padding: 10px; border: 2px solid #667eea; border-radius: 8px; width: 100%;">
             </div>
@@ -406,7 +384,6 @@
 
             <div id="csvStatus" class="status-message"></div>
 
-            <!-- Preview Table -->
             <div id="csvPreviewContainer" class="csv-preview hidden">
                 <h3 style="margin-bottom: 20px; color: #333;">Preview (<span id="rowCount">0</span> rows)</h3>
                 <table id="csvTable">
@@ -428,7 +405,6 @@
                 </div>
             </div>
 
-            <!-- Progress -->
             <div id="progressContainer" class="progress-container">
                 <p id="progressText">Generating certificates...</p>
                 <div class="progress-bar">
@@ -445,7 +421,7 @@
 
     <script>
 // ================================================================
-// SIMPLE WORKING BULK UPLOAD SYSTEM
+// CERTIFICATE GENERATOR WITH IMPROVED ALIGNMENT & BACKGROUND
 // ================================================================
 
 let logoImage = null;
@@ -525,7 +501,7 @@ function generateSinglePdf() {
         format: 'a4'
     });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, 497, 410);
+    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
 
     const studentName = document.getElementById('studentName').value;
     const courseName = document.getElementById('courseName').value;
@@ -654,8 +630,8 @@ async function generateAllPdfs() {
 
             // Create canvas for this certificate
             const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = 3366;  // 1122 * 3
-            tempCanvas.height = 2382; // 794 * 3
+            tempCanvas.width = 3366;
+            tempCanvas.height = 2382;
             const ctx = tempCanvas.getContext('2d');
             ctx.scale(3, 3);
 
@@ -681,7 +657,6 @@ async function generateAllPdfs() {
             document.getElementById('progressFill').textContent = progress + '%';
             document.getElementById('progressText').textContent = 'Generated ' + (i + 1) + ' of ' + total;
 
-            // Small delay to prevent freezing
             if (i % 10 === 0) {
                 await new Promise(resolve => setTimeout(resolve, 50));
             }
@@ -706,7 +681,7 @@ async function generateAllPdfs() {
     }
 }
 
-// ========== DRAWING FUNCTIONS ==========
+// ========== DRAWING FUNCTIONS WITH IMPROVED ALIGNMENT & BACKGROUND ==========
 function drawCertificate(data) {
     const canvas = document.getElementById('certificateCanvas');
     drawCertificateImpl(canvas, data, 3);
@@ -725,42 +700,62 @@ function drawCertificateImpl(canvas, data, scale) {
 }
 
 function drawCertificateCore(ctx, data) {
-    // Background
-    ctx.fillStyle = '#ffffff';
+    // ============ BACKGROUND ============
+    // Main background - cream/off-white
+    ctx.fillStyle = '#fffef9';
     ctx.fillRect(0, 0, 1122, 794);
 
+    // Decorative gradient background (subtle)
+    const gradient = ctx.createLinearGradient(0, 0, 1122, 794);
+    gradient.addColorStop(0, 'rgba(212, 175, 55, 0.02)');
+    gradient.addColorStop(1, 'rgba(26, 58, 82, 0.02)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 1122, 794);
+
+    // ============ OUTER DECORATIVE ELEMENTS ============
     // Outer gold border
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 12;
     ctx.strokeRect(30, 30, 1062, 734);
 
-    // Inner border
+    // Inner decorative border
     ctx.strokeStyle = '#b8860b';
     ctx.lineWidth = 2;
     ctx.strokeRect(45, 45, 1032, 704);
 
-    // Draw logo
+    // Outer thin border
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(50, 50, 1022, 694);
+
+    // ============ DECORATIVE CORNERS ============
+    drawDecorativeCorners(ctx);
+
+    // ============ LOGO (CENTERED AT TOP) ============
     if (logoImage && logoImage.complete) {
         try {
-            const logoMaxSize = 400;
+            const logoMaxSize = 110;
             const ratio = logoImage.width / logoImage.height;
             let w = logoMaxSize, h = logoMaxSize;
 
             if (ratio > 1) h = w / ratio;
             else w = h * ratio;
 
-            ctx.drawImage(logoImage, 561 - w/2, 60, w, h);
+            const logoX = 561 - w/2;
+            const logoY = 70;
+            ctx.drawImage(logoImage, logoX, logoY, w, h);
         } catch(e) {}
     }
 
-    // Title
+    // ============ MAIN CONTENT - ALL CENTERED ============
+    ctx.textAlign = 'center';
+
+    // Certificate title - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'bold 48px Georgia, serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Certificate of ' + data.certificateType, 261, 220);
+    ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
 
-
-    // Line
+    // Decorative line under title
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -768,19 +763,17 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(761, 240);
     ctx.stroke();
 
-    
-    // Text
+    // "This certifies that" text - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 20px Georgia, serif';
     ctx.fillText('This certifies that', 561, 290);
 
-    
-    // Student name
+    // Student name - CENTERED & BOLD
     ctx.font = 'bold 44px Georgia, serif';
+    ctx.fillStyle = '#1a1a2e';
     ctx.fillText(data.studentName, 561, 350);
 
-    
-    // Underline
+    // Underline for student name
     const nameWidth = ctx.measureText(data.studentName).width;
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
@@ -789,45 +782,126 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(561 + nameWidth/2 + 15, 360);
     ctx.stroke();
 
-    
-    // Course text
+    // "for successfully demonstrating..." text - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
-    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 400);
+    // Split long text into multiple lines
+    wrapText(ctx, 'for successfully demonstrating proficiency and completing', 561, 400, 500);
 
-    
-    // Course name
+    // "all the requirements of the course" - CENTERED
+    ctx.fillText('all the requirements of the course', 561, 420);
+
+    // Course name - CENTERED & BOLD
     ctx.font = 'bold 32px Georgia, serif';
-    ctx.fillText(data.courseName, 561, 450);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillText(data.courseName, 561, 470);
 
-    
-    // Course underline
+    // Underline for course
     const courseWidth = ctx.measureText(data.courseName).width;
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(561 - courseWidth/2 - 15, 460);
-    ctx.lineTo(561 + courseWidth/2 + 15, 460);
+    ctx.moveTo(561 - courseWidth/2 - 15, 480);
+    ctx.lineTo(561 + courseWidth/2 + 15, 480);
     ctx.stroke();
 
-    
-    // Lecturer text
+    // "under the instruction of" text - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
-    ctx.fillText('under the instruction of', 561, 510);
+    ctx.fillText('under the instruction of', 561, 530);
 
-    
-    // Lecturer name
+    // Lecturer name - CENTERED & BOLD
     ctx.font = 'bold 26px Georgia, serif';
-    ctx.fillText(data.lecturerName, 561, 550);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillText(data.lecturerName, 561, 570);
 
-    
-    // Date
+    // ============ FOOTER ELEMENTS ============
+
+    // Decorative line above date
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(361, 610);
+    ctx.lineTo(761, 610);
+    ctx.stroke();
+
+    // Issued date - CENTERED
     ctx.font = 'italic 16px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
-    ctx.fillText('Issued: ' + data.issueDate, 561, 650);
+    ctx.fillText('Issued: ' + data.issueDate, 561, 640);
 
-   }
+    // Signature line - CENTERED
+    ctx.strokeStyle = '#1a1a2e';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(411, 700);
+    ctx.lineTo(711, 700);
+    ctx.stroke();
+
+    // "Authorized Signature" text - CENTERED
+    ctx.font = '12px Georgia, serif';
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillText('Authorized Signature', 561, 720);
+}
+
+// Decorative corners
+function drawDecorativeCorners(ctx) {
+    const cornerSize = 40;
+    const offset = 50;
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 2;
+
+    // Top-left
+    ctx.beginPath();
+    ctx.moveTo(offset + cornerSize, offset);
+    ctx.lineTo(offset, offset);
+    ctx.lineTo(offset, offset + cornerSize);
+    ctx.stroke();
+
+    // Top-right
+    ctx.beginPath();
+    ctx.moveTo(1122 - offset - cornerSize, offset);
+    ctx.lineTo(1122 - offset, offset);
+    ctx.lineTo(1122 - offset, offset + cornerSize);
+    ctx.stroke();
+
+    // Bottom-left
+    ctx.beginPath();
+    ctx.moveTo(offset, 794 - offset - cornerSize);
+    ctx.lineTo(offset, 794 - offset);
+    ctx.lineTo(offset + cornerSize, 794 - offset);
+    ctx.stroke();
+
+    // Bottom-right
+    ctx.beginPath();
+    ctx.moveTo(1122 - offset, 794 - offset - cornerSize);
+    ctx.lineTo(1122 - offset, 794 - offset);
+    ctx.lineTo(1122 - offset - cornerSize, 794 - offset);
+    ctx.stroke();
+}
+
+// Helper function to wrap text
+function wrapText(ctx, text, x, y, maxWidth) {
+    if (maxWidth === undefined) maxWidth = 0;
+    if (maxWidth <= 0) return;
+
+    const words = text.split(' ');
+    let line = '';
+
+    for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            ctx.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += 25;
+        } else {
+            line = testLine;
+        }
+    }
+    ctx.fillText(line, x, y);
+}
 
 // ========== UTILITY ==========
 function showToast(message, type) {
