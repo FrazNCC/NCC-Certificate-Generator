@@ -9,23 +9,10 @@
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            min-height: 100vh; padding: 20px;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px 30px; text-align: center; }
         .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
         .nav-tabs { display: flex; background: #f8f9fa; border-bottom: 2px solid #dee2e6; }
         .nav-tab { flex: 1; padding: 20px; text-align: center; background: none; border: none; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: #495057; }
@@ -59,7 +46,6 @@
         <button class="nav-tab active" data-tab="single">Single Certificate</button>
         <button class="nav-tab" data-tab="bulk">Bulk Certificates</button>
     </div>
-    <!-- Single Certificate Tab -->
     <div id="singleTab" class="tab-content">
         <h2 style="margin-bottom: 20px; color: #333;">Generate Single Certificate</h2>
         <form id="singleForm">
@@ -76,7 +62,6 @@
             <div class="button-group"><button id="generatePdfBtn" class="btn btn-success">Generate PDF</button></div>
         </div>
     </div>
-    <!-- Bulk Tab omitted for brevity, same as before -->
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -121,13 +106,11 @@ function generateSinglePdf() {
     const courseName = document.getElementById('courseName').value;
     const filename = (courseName + '_' + studentName).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
     pdf.save(filename);
-    showToast('PDF generated: ' + filename, 'success');
 }
 function drawCertificate(data) {
     const canvas = document.getElementById('certificateCanvas');
     canvas.width = 1122 * 3; canvas.height = 794 * 3; const scale = 3;
     const ctx = canvas.getContext('2d'); ctx.scale(scale, scale);
-    // Background
     ctx.fillStyle = '#fffef9'; ctx.fillRect(0,0,1122,794);
     const gradient = ctx.createLinearGradient(0,0,1122,794);
     gradient.addColorStop(0,'rgba(212,175,55,0.02)'); gradient.addColorStop(1,'rgba(26,58,82,0.02)');
@@ -138,37 +121,39 @@ function drawCertificate(data) {
     drawDecorativeCorners(ctx);
     if (logoImage && logoImage.complete) {
         try {
-            const logoMaxSize = 300;
-            const ratio = logoImage.width / logoImage.height;
+            const logoMaxSize = 300, ratio = logoImage.width / logoImage.height;
             let w = logoMaxSize, h = logoMaxSize;
             if (ratio > 1) h = w / ratio; else w = h * ratio;
-            const logoX = 561 - w/2; const logoY = 70;
+            const logoX = 561 - w/2, logoY = 65;
             ctx.drawImage(logoImage, logoX, logoY, w, h);
         } catch(e) {}
     }
+    // Adjusted Y values:
     ctx.textAlign = 'center';
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'bold 46px Arial, Segoe UI, sans-serif';
-    ctx.fillText('Certificate of ' + data.certificateType, 561, 230);
+    ctx.fillText('Certificate of ' + data.certificateType, 561, 400);
     ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(361, 250); ctx.lineTo(761, 250); ctx.stroke();
-    ctx.font = 'italic 22px Segoe UI, Arial, sans-serif';
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillText('This certifies that', 561, 295);
-    ctx.font = 'bold 44px Segoe UI, Arial, sans-serif'; ctx.fillText(data.studentName, 561, 355);
+    ctx.beginPath(); ctx.moveTo(361, 420); ctx.lineTo(761, 420); ctx.stroke();
+    ctx.font = 'italic 22px Segoe UI, Arial, sans-serif'; ctx.fillStyle = '#1a1a2e'; ctx.fillText('This certifies that', 561, 440);
+    ctx.font = 'bold 44px Segoe UI, Arial, sans-serif'; ctx.fillText(data.studentName, 561, 480);
     let nameWidth = ctx.measureText(data.studentName).width;
     ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(561 - nameWidth/2 - 15, 365); ctx.lineTo(561 + nameWidth/2 + 15, 365); ctx.stroke();
-    ctx.font = 'italic 20px Segoe UI, Arial, sans-serif'; wrapText(ctx,'for successfully demonstrating proficiency and completing', 561, 405, 500);
-    ctx.fillText('all the requirements of the course', 561, 430);
-    ctx.font = 'bold 30px Segoe UI, Arial, sans-serif'; ctx.fillText(data.courseName, 561, 475);
+    ctx.beginPath(); ctx.moveTo(561 - nameWidth/2 - 15, 488); ctx.lineTo(561 + nameWidth/2 + 15, 488); ctx.stroke();
+    ctx.font = 'italic 20px Segoe UI, Arial, sans-serif'; ctx.fillText('for successfully demonstrating proficiency and completing',561,520);
+    ctx.fillText('all the requirements of the course',561,540);
+    ctx.font = 'bold 30px Segoe UI, Arial, sans-serif'; ctx.fillText(data.courseName,561,570);
     let courseWidth = ctx.measureText(data.courseName).width;
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(561-courseWidth/2-15, 485); ctx.lineTo(561+courseWidth/2+15,485); ctx.stroke();
-    ctx.font = 'italic 18px Segoe UI, Arial, sans-serif'; ctx.fillText('under the instruction of', 561, 530);
-    // Footer: left-lecturer, right-date
-    ctx.textAlign = 'left'; ctx.font = 'bold 20px Segoe UI, Arial, sans-serif'; ctx.fillText(data.lecturerName, 60, 760);
-    ctx.textAlign = 'right'; ctx.font = 'italic 17px Segoe UI, Arial, sans-serif'; ctx.fillText('Issued: ' + data.issueDate, 1060, 760);
+    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(561-courseWidth/2-15,580); ctx.lineTo(561+courseWidth/2+15,580); ctx.stroke();
+    // Footer at the bottom inside border
+    ctx.font = 'italic 18px Segoe UI, Arial, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('under the instruction of', 1055, 714);
+    ctx.font = 'bold 21px Segoe UI, Arial, sans-serif';
+    ctx.fillText(data.lecturerName, 1055, 744);
+    ctx.font = 'italic 17px Segoe UI, Arial, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Issued: ' + data.issueDate, 68, 744);
 }
 function drawDecorativeCorners(ctx) {
     const cornerSize = 40, offset = 50; ctx.strokeStyle='#d4af37'; ctx.lineWidth=2;
@@ -176,20 +161,6 @@ function drawDecorativeCorners(ctx) {
     ctx.beginPath(); ctx.moveTo(1122 - offset - cornerSize, offset); ctx.lineTo(1122 - offset, offset); ctx.lineTo(1122 - offset, offset + cornerSize); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(offset, 794-offset-cornerSize); ctx.lineTo(offset,794-offset); ctx.lineTo(offset+cornerSize,794-offset); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(1122-offset, 794-offset-cornerSize); ctx.lineTo(1122-offset, 794-offset); ctx.lineTo(1122-offset-cornerSize, 794-offset); ctx.stroke();
-}
-function wrapText(ctx, text, x, y, maxWidth) {
-    if (maxWidth === undefined) maxWidth = 0; if (maxWidth <= 0) return;
-    const words = text.split(' '); let line = '';
-    for (let n = 0; n < words.length; n++) {
-        let testLine = line + words[n] + ' '; let metrics = ctx.measureText(testLine);
-        if (metrics.width > maxWidth && n > 0) {ctx.fillText(line, x, y);line = words[n] + ' ';y += 25;} else {line = testLine;}
-    }
-    ctx.fillText(line, x, y);
-}
-function showToast(msg, type) {
-    const toast = document.createElement('div');
-    toast.textContent = msg;
-    toast.className = 'btn "toast "'+type; document.body.appendChild(toast); setTimeout(()=>toast.remove(), 3000);
 }
 </script>
 </body></html>
