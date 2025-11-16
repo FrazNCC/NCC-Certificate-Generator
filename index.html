@@ -38,12 +38,6 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
         }
 
         .nav-tabs {
@@ -93,7 +87,6 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
-            font-size: 1em;
         }
 
         .form-group input,
@@ -103,7 +96,6 @@
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1em;
-            transition: all 0.3s ease;
             font-family: inherit;
         }
 
@@ -154,15 +146,6 @@
             background: #218838;
         }
 
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -176,17 +159,11 @@
             text-align: center;
         }
 
-        #previewSection h3 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
         #certificateCanvas {
             max-width: 100%;
             height: auto;
             border: 3px solid #dee2e6;
             border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin: 20px 0;
             background: white;
         }
@@ -210,13 +187,6 @@
             display: none;
         }
 
-        .file-upload-label {
-            cursor: pointer;
-            font-size: 1.1em;
-            color: #667eea;
-            font-weight: 600;
-        }
-
         .csv-preview {
             margin-top: 30px;
             overflow-x: auto;
@@ -226,20 +196,18 @@
             width: 100%;
             border-collapse: collapse;
             background: white;
-            border-radius: 8px;
-            overflow: hidden;
         }
 
         .csv-preview th {
             background: #667eea;
             color: white;
-            padding: 15px;
+            padding: 12px;
             text-align: left;
             font-weight: 600;
         }
 
         .csv-preview td {
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-bottom: 1px solid #dee2e6;
         }
 
@@ -266,21 +234,6 @@
 
         .toast.error {
             background: #dc3545;
-        }
-
-        .toast.info {
-            background: #17a2b8;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
         }
 
         .progress-container {
@@ -321,21 +274,32 @@
             padding: 15px;
             border-radius: 4px;
             margin-bottom: 20px;
-            color: #333;
         }
 
-        #toastContainer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
             .tab-content {
                 padding: 20px;
             }
@@ -346,28 +310,22 @@
 
             .btn {
                 width: 100%;
-                margin-right: 0;
-                margin-bottom: 10px;
             }
+        }
 
-            .nav-tabs {
-                flex-direction: column;
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
             }
-
-            .csv-preview table {
-                font-size: 0.9em;
-            }
-
-            .csv-preview th,
-            .csv-preview td {
-                padding: 8px;
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
     </style>
 </head>
 <body>
-    <div id="toastContainer"></div>
-
     <div class="container">
         <div class="header">
             <h1>🎓 Certificate Generator</h1>
@@ -383,33 +341,29 @@
         <div id="singleTab" class="tab-content">
             <h2 style="margin-bottom: 20px; color: #333;">Generate Single Certificate</h2>
 
-            <div class="info-box">
-                ℹ️ Fill in the details below and preview your certificate before generating the PDF.
-            </div>
-
             <form id="singleForm">
                 <div class="form-group">
-                    <label for="studentName">Student Name *</label>
+                    <label for="studentName">Student Name</label>
                     <input type="text" id="studentName" placeholder="Enter student name" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="courseName">Course Name *</label>
+                    <label for="courseName">Course Name</label>
                     <input type="text" id="courseName" placeholder="Enter course name" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="lecturerName">Lecturer Name *</label>
+                    <label for="lecturerName">Lecturer Name</label>
                     <input type="text" id="lecturerName" placeholder="Enter lecturer name" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="issueDate">Issue Date *</label>
+                    <label for="issueDate">Issue Date</label>
                     <input type="date" id="issueDate" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="certificateType">Certificate Type *</label>
+                    <label for="certificateType">Certificate Type</label>
                     <select id="certificateType" required>
                         <option value="Completion">Certificate of Completion</option>
                         <option value="Achievement">Certificate of Achievement</option>
@@ -419,7 +373,6 @@
 
                 <div class="button-group">
                     <button type="submit" class="btn btn-primary">Preview Certificate</button>
-                    <button type="button" id="clearFormBtn" class="btn btn-secondary">Clear</button>
                 </div>
             </form>
 
@@ -428,7 +381,6 @@
                 <canvas id="certificateCanvas"></canvas>
                 <div class="button-group">
                     <button id="generatePdfBtn" class="btn btn-success">Generate PDF</button>
-                    <button type="button" id="closePreviewBtn" class="btn btn-secondary">Close Preview</button>
                 </div>
             </div>
         </div>
@@ -438,25 +390,26 @@
             <h2 style="margin-bottom: 20px; color: #333;">Generate Bulk Certificates</h2>
 
             <div class="info-box">
-                ℹ️ Upload a CSV file with multiple students to generate certificates in bulk. Download the sample template to get started.
+                📋 Upload a CSV file with student data. Format: Student Name, Course Name, Lecturer Name, Issue Date, Certificate Type
             </div>
 
-            <div style="margin-bottom: 30px;">
-                <button id="downloadCsvBtn" class="btn btn-secondary">📥 Download Sample CSV Template</button>
+            <div style="margin-bottom: 20px;">
+                <button id="downloadSampleBtn" class="btn btn-secondary">📥 Download Sample CSV</button>
             </div>
 
-            <div class="file-upload" onclick="document.getElementById('csvFileInput').click()">
-                <input type="file" id="csvFileInput" accept=".csv">
-                <div class="file-upload-label">
-                    <p style="font-size: 3em; margin-bottom: 10px;">📁</p>
-                    <p>Click to upload CSV file or drag and drop</p>
-                    <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">CSV must contain: Student Name, Course Name, Lecturer Name, Issue Date, Certificate Type</p>
-                </div>
+            <!-- Simple File Input -->
+            <div style="margin-bottom: 20px;">
+                <input type="file" id="csvFile" accept=".csv" style="display: block; padding: 10px; border: 2px solid #667eea; border-radius: 8px; width: 100%;">
             </div>
 
+            <button id="uploadCsvBtn" class="btn btn-primary">📤 Upload & Preview CSV</button>
+
+            <div id="csvStatus" class="status-message"></div>
+
+            <!-- Preview Table -->
             <div id="csvPreviewContainer" class="csv-preview hidden">
-                <h3 style="margin-bottom: 20px; color: #333;">Preview - <span id="csvCount">0</span> certificates</h3>
-                <table>
+                <h3 style="margin-bottom: 20px; color: #333;">Preview (<span id="rowCount">0</span> rows)</h3>
+                <table id="csvTable">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -467,16 +420,17 @@
                             <th>Type</th>
                         </tr>
                     </thead>
-                    <tbody id="csvPreviewBody"></tbody>
+                    <tbody id="csvTableBody"></tbody>
                 </table>
-                <div class="button-group">
-                    <button id="generateBulkBtn" class="btn btn-success">🎯 Generate All Certificates (ZIP)</button>
-                    <button type="button" id="clearCsvBtn" class="btn btn-secondary">Clear</button>
+
+                <div class="button-group" style="margin-top: 20px;">
+                    <button id="generateAllBtn" class="btn btn-success">🎯 Generate All PDFs (ZIP)</button>
                 </div>
             </div>
 
-            <div class="progress-container" id="progressContainer">
-                <p id="progressText" style="margin-bottom: 10px; font-weight: 600;">Generating certificates...</p>
+            <!-- Progress -->
+            <div id="progressContainer" class="progress-container">
+                <p id="progressText">Generating certificates...</p>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill">0%</div>
                 </div>
@@ -486,705 +440,403 @@
 
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/papaparse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
-    <!-- Application JavaScript -->
     <script>
 // ================================================================
-// CERTIFICATE GENERATOR - FIXED LOGO & BULK ISSUES
+// SIMPLE WORKING BULK UPLOAD SYSTEM
 // ================================================================
 
-// Global variables
 let logoImage = null;
-const LOGO_PATH = 'logo-1.png';
-let isGeneratingBulk = false;
+let csvDataArray = [];
 
-// State management
-const state = {
-  currentTab: 'single',
-  currentCertificateData: null,
-  csvData: [],
-  previewShown: false
-};
-
-// Initialize the application
-function init() {
-  setupEventListeners();
-  setDefaultDate();
-  initializeLogo();
+// Load logo
+function loadLogo() {
+    logoImage = new Image();
+    logoImage.src = 'logo-1.png';
+    logoImage.crossOrigin = "Anonymous";
 }
 
-// Initialize and load logo with proper aspect ratio handling
-function initializeLogo() {
-  logoImage = new Image();
-  logoImage.src = LOGO_PATH;
-  logoImage.crossOrigin = "Anonymous";
-  logoImage.onerror = function() {
-    console.warn('Logo not found at:', LOGO_PATH);
-  };
-  logoImage.onload = function() {
-    console.log('Logo loaded successfully');
-  };
-}
-
-// Setup all event listeners
-function setupEventListeners() {
-  document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', (e) => switchTab(e.target.dataset.tab));
-  });
-
-  document.getElementById('singleForm').addEventListener('submit', handlePreview);
-  document.getElementById('generatePdfBtn').addEventListener('click', handleGeneratePdf);
-  document.getElementById('closePreviewBtn').addEventListener('click', () => {
-    document.getElementById('previewSection').classList.add('hidden');
-  });
-  document.getElementById('clearFormBtn').addEventListener('click', () => {
-    document.getElementById('singleForm').reset();
+// Initialize
+window.addEventListener('DOMContentLoaded', function() {
+    loadLogo();
     setDefaultDate();
-    document.getElementById('previewSection').classList.add('hidden');
-  });
-
-  document.getElementById('downloadCsvBtn').addEventListener('click', downloadSampleCsv);
-  document.getElementById('csvFileInput').addEventListener('change', handleCsvUpload);
-  document.getElementById('generateBulkBtn').addEventListener('click', handleGenerateBulk);
-  document.getElementById('clearCsvBtn').addEventListener('click', () => {
-    document.getElementById('csvFileInput').value = '';
-    document.getElementById('csvPreviewContainer').classList.add('hidden');
-    state.csvData = [];
-  });
-
-  setupDragAndDrop();
-}
-
-// Setup drag and drop for CSV
-function setupDragAndDrop() {
-  const fileUpload = document.querySelector('.file-upload');
-
-  fileUpload.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    fileUpload.style.background = '#e9ecef';
-    fileUpload.style.borderColor = '#764ba2';
-  });
-
-  fileUpload.addEventListener('dragleave', () => {
-    fileUpload.style.background = '#f8f9fa';
-    fileUpload.style.borderColor = '#667eea';
-  });
-
-  fileUpload.addEventListener('drop', (e) => {
-    e.preventDefault();
-    fileUpload.style.background = '#f8f9fa';
-    fileUpload.style.borderColor = '#667eea';
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      document.getElementById('csvFileInput').files = files;
-      handleCsvUpload({ target: { files: files } });
-    }
-  });
-}
+    setupEventListeners();
+});
 
 function setDefaultDate() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('issueDate').value = today;
+    document.getElementById('issueDate').value = new Date().toISOString().split('T')[0];
 }
 
-function switchTab(tabName) {
-  state.currentTab = tabName;
-
-  document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.tab === tabName);
-  });
-
-  document.getElementById('singleTab').classList.toggle('hidden', tabName !== 'single');
-  document.getElementById('bulkTab').classList.toggle('hidden', tabName !== 'bulk');
-}
-
-function handlePreview(e) {
-  e.preventDefault();
-
-  const formData = {
-    studentName: document.getElementById('studentName').value.trim(),
-    courseName: document.getElementById('courseName').value.trim(),
-    lecturerName: document.getElementById('lecturerName').value.trim(),
-    issueDate: document.getElementById('issueDate').value,
-    certificateType: document.getElementById('certificateType').value
-  };
-
-  if (!validateFormData(formData)) {
-    showToast('Please fill in all required fields', 'error');
-    return;
-  }
-
-  state.currentCertificateData = formData;
-  drawCertificate(formData);
-
-  document.getElementById('previewSection').classList.remove('hidden');
-  document.getElementById('generatePdfBtn').disabled = false;
-  state.previewShown = true;
-
-  setTimeout(() => {
-    document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
-}
-
-function validateFormData(data) {
-  return Object.values(data).every(value => value && value.toString().trim() !== '');
-}
-
-// FIXED: Logo drawing with proper aspect ratio
-function drawCertificate(data) {
-  const canvas = document.getElementById('certificateCanvas');
-  const ctx = canvas.getContext('2d');
-
-  const scale = 3;
-  canvas.width = 1122 * scale;
-  canvas.height = 794 * scale;
-
-  ctx.scale(scale, scale);
-
-  // Background
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 1122, 794);
-
-  // Outer border
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 12;
-  ctx.strokeRect(30, 30, 1062, 734);
-
-  // Inner border
-  ctx.strokeStyle = '#b8860b';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(45, 45, 1032, 704);
-
-  // Decorative corners
-  drawDecorativeCorners(ctx);
-
-  // FIXED LOGO: Maintain aspect ratio, prevent distortion
-  if (logoImage && logoImage.complete && logoImage.width > 0) {
-    try {
-      const logoMaxWidth = 100;
-      const logoMaxHeight = 100;
-
-      // Calculate aspect ratio to prevent distortion
-      const aspectRatio = logoImage.width / logoImage.height;
-      let logoWidth = logoMaxWidth;
-      let logoHeight = logoMaxHeight;
-
-      if (aspectRatio > 1) {
-        logoHeight = logoMaxWidth / aspectRatio;
-      } else {
-        logoWidth = logoMaxHeight * aspectRatio;
-      }
-
-      const logoX = 561 - (logoWidth / 2);
-      const logoY = 60;
-
-      ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
-    } catch(e) {
-      console.warn('Error drawing logo:', e);
-    }
-  }
-
-  // Certificate title
-  ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'bold 48px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
-
-  // Decorative line
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(361, 240);
-  ctx.lineTo(761, 240);
-  ctx.stroke();
-
-  // "This certifies that" text
-  ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'italic 22px Georgia, serif';
-  ctx.fillText('This certifies that', 561, 300);
-
-  // Student name
-  ctx.font = 'bold 44px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.studentName, 561, 360);
-
-  // Underline for name
-  const nameWidth = ctx.measureText(data.studentName).width;
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(561 - nameWidth/2 - 15, 370);
-  ctx.lineTo(561 + nameWidth/2 + 15, 370);
-  ctx.stroke();
-
-  // "has successfully completed" text
-  ctx.font = 'italic 20px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('has successfully completed the course', 561, 410);
-
-  // Course name
-  ctx.font = 'bold 32px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.courseName, 561, 460);
-
-  // Underline for course
-  const courseWidth = ctx.measureText(data.courseName).width;
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(561 - courseWidth/2 - 15, 470);
-  ctx.lineTo(561 + courseWidth/2 + 15, 470);
-  ctx.stroke();
-
-  // "under the instruction of" text
-  ctx.font = 'italic 18px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('under the instruction of', 561, 520);
-
-  // Lecturer name
-  ctx.font = 'bold 26px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.lecturerName, 561, 560);
-
-  // Issue date
-  ctx.font = 'italic 18px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  const formattedDate = formatDate(data.issueDate);
-  ctx.fillText('Issued on: ' + formattedDate, 561, 670);
-
-  // Signature line
-  ctx.strokeStyle = '#1a1a2e';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(411, 710);
-  ctx.lineTo(711, 710);
-  ctx.stroke();
-
-  ctx.font = '14px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('Authorized Signature', 561, 730);
-}
-
-function drawDecorativeCorners(ctx) {
-  const cornerSize = 40;
-  const offset = 45;
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 3;
-
-  ctx.beginPath();
-  ctx.moveTo(offset + cornerSize, offset);
-  ctx.lineTo(offset, offset);
-  ctx.lineTo(offset, offset + cornerSize);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(1122 - offset - cornerSize, offset);
-  ctx.lineTo(1122 - offset, offset);
-  ctx.lineTo(1122 - offset, offset + cornerSize);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(offset, 794 - offset - cornerSize);
-  ctx.lineTo(offset, 794 - offset);
-  ctx.lineTo(offset + cornerSize, 794 - offset);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(1122 - offset, 794 - offset - cornerSize);
-  ctx.lineTo(1122 - offset, 794 - offset);
-  ctx.lineTo(1122 - offset - cornerSize, 794 - offset);
-  ctx.stroke();
-}
-
-function formatDate(dateString) {
-  const date = new Date(dateString + 'T00:00:00');
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
-}
-
-function handleGeneratePdf() {
-  if (!state.currentCertificateData) {
-    showToast('Please preview the certificate first', 'error');
-    return;
-  }
-
-  generatePdfFromData(state.currentCertificateData);
-  showToast('Certificate generated successfully!', 'success');
-}
-
-function generatePdfFromData(data) {
-  const canvas = document.getElementById('certificateCanvas');
-  const imgData = canvas.toDataURL('image/png', 1.0);
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({
-    orientation: 'landscape',
-    unit: 'mm',
-    format: 'a4'
-  });
-
-  pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
-
-  const filename = sanitizeFilename(data.courseName + '_' + data.studentName + '.pdf');
-  pdf.save(filename);
-}
-
-function sanitizeFilename(filename) {
-  return filename
-    .replace(/[^a-z0-9_-]/gi, '_')
-    .replace(/_+/g, '_')
-    .replace(/^_|_$/g, '')
-    .toLowerCase();
-}
-
-function downloadSampleCsv() {
-  const csvContent = [
-    ['Student Name', 'Course Name', 'Lecturer Name', 'Issue Date', 'Certificate Type'],
-    ['John Smith', 'Advanced JavaScript', 'Dr. Jane Doe', '2025-11-16', 'Achievement'],
-    ['Emily Johnson', 'Web Development Fundamentals', 'Prof. Robert Brown', '2025-11-16', 'Completion'],
-    ['Michael Chen', 'React Masterclass', 'Dr. Sarah Williams', '2025-11-16', 'Excellence']
-  ];
-
-  const csv = csvContent.map(row => 
-    row.map(cell => '"' + cell + '"').join(',')
-  ).join('\n');
-
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'certificate_template.csv';
-  link.click();
-
-  showToast('Sample CSV downloaded', 'success');
-}
-
-function handleCsvUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  Papa.parse(file, {
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      if (results.errors.length > 0) {
-        showToast('Error parsing CSV file', 'error');
-        return;
-      }
-
-      if (!results.data || results.data.length === 0) {
-        showToast('CSV file is empty', 'error');
-        return;
-      }
-
-      const requiredColumns = ['Student Name', 'Course Name', 'Lecturer Name', 'Issue Date', 'Certificate Type'];
-      const headers = Object.keys(results.data[0] || {});
-      const missingColumns = requiredColumns.filter(col => !headers.includes(col));
-
-      if (missingColumns.length > 0) {
-        showToast('Missing columns: ' + missingColumns.join(', '), 'error');
-        return;
-      }
-
-      const validData = results.data.filter(row => {
-        return row['Student Name'] && row['Course Name'] && 
-               row['Lecturer Name'] && row['Issue Date'] && 
-               row['Certificate Type'];
-      });
-
-      if (validData.length === 0) {
-        showToast('No valid data found in CSV', 'error');
-        return;
-      }
-
-      state.csvData = validData;
-      displayCsvPreview(validData);
-      showToast(validData.length + ' certificates ready to generate', 'success');
-    },
-    error: function(error) {
-      showToast('Error reading CSV file', 'error');
-      console.error(error);
-    }
-  });
-}
-
-function displayCsvPreview(data) {
-  const tbody = document.getElementById('csvPreviewBody');
-  tbody.innerHTML = '';
-
-  data.forEach((row, index) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + (index + 1) + '</td>' +
-      '<td>' + escapeHtml(row['Student Name']) + '</td>' +
-      '<td>' + escapeHtml(row['Course Name']) + '</td>' +
-      '<td>' + escapeHtml(row['Lecturer Name']) + '</td>' +
-      '<td>' + row['Issue Date'] + '</td>' +
-      '<td>' + escapeHtml(row['Certificate Type']) + '</td>';
-    tbody.appendChild(tr);
-  });
-
-  document.getElementById('csvCount').textContent = data.length;
-  document.getElementById('csvPreviewContainer').classList.remove('hidden');
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-// FIXED: Bulk certificate generation with proper error handling
-async function handleGenerateBulk() {
-  if (state.csvData.length === 0) {
-    showToast('Please upload a CSV file first', 'error');
-    return;
-  }
-
-  if (isGeneratingBulk) {
-    showToast('Generation already in progress', 'info');
-    return;
-  }
-
-  const btn = document.getElementById('generateBulkBtn');
-  const originalText = btn.innerHTML;
-  btn.innerHTML = 'Generating...';
-  btn.disabled = true;
-  isGeneratingBulk = true;
-
-  document.getElementById('progressContainer').style.display = 'block';
-
-  try {
-    const zip = new JSZip();
-    const { jsPDF } = window.jspdf;
-    const totalCerts = state.csvData.length;
-    let successCount = 0;
-
-    for (let i = 0; i < totalCerts; i++) {
-      try {
-        const row = state.csvData[i];
-
-        const certData = {
-          studentName: String(row['Student Name']).trim(),
-          courseName: String(row['Course Name']).trim(),
-          lecturerName: String(row['Lecturer Name']).trim(),
-          issueDate: String(row['Issue Date']).trim(),
-          certificateType: String(row['Certificate Type']).trim()
-        };
-
-        // Validate each row
-        if (!certData.studentName || !certData.courseName || !certData.lecturerName || !certData.issueDate || !certData.certificateType) {
-          console.warn('Row ' + (i+1) + ' has missing data, skipping');
-          continue;
-        }
-
-        // Create temporary canvas
-        const tempCanvas = document.createElement('canvas');
-        const scale = 3;
-        tempCanvas.width = 1122 * scale;
-        tempCanvas.height = 794 * scale;
-        const ctx = tempCanvas.getContext('2d');
-        ctx.scale(scale, scale);
-
-        // Draw certificate on temporary canvas
-        drawCertificateOnCanvas(ctx, certData);
-
-        // Convert to PDF
-        const imgData = tempCanvas.toDataURL('image/png', 1.0);
-        const pdf = new jsPDF({
-          orientation: 'landscape',
-          unit: 'mm',
-          format: 'a4'
+function setupEventListeners() {
+    // Tabs
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+
+            document.getElementById('singleTab').classList.add('hidden');
+            document.getElementById('bulkTab').classList.add('hidden');
+
+            if (e.target.dataset.tab === 'single') {
+                document.getElementById('singleTab').classList.remove('hidden');
+            } else {
+                document.getElementById('bulkTab').classList.remove('hidden');
+            }
         });
-        pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+    });
 
-        // Add to ZIP
-        const filename = sanitizeFilename(certData.courseName + '_' + certData.studentName + '.pdf');
-        const pdfBlob = pdf.output('blob');
-        zip.file(filename, pdfBlob);
+    // Single mode
+    document.getElementById('singleForm').addEventListener('submit', handlePreview);
+    document.getElementById('generatePdfBtn').addEventListener('click', generateSinglePdf);
 
-        successCount++;
+    // Bulk mode
+    document.getElementById('downloadSampleBtn').addEventListener('click', downloadSampleCsv);
+    document.getElementById('uploadCsvBtn').addEventListener('click', uploadCsv);
+    document.getElementById('generateAllBtn').addEventListener('click', generateAllPdfs);
+}
 
-        // Update progress
-        const progress = Math.round(((i + 1) / totalCerts) * 100);
-        document.getElementById('progressFill').style.width = progress + '%';
-        document.getElementById('progressFill').textContent = progress + '%';
-        document.getElementById('progressText').textContent = 'Generated ' + successCount + ' of ' + totalCerts + ' certificates';
+// ========== SINGLE MODE ==========
+function handlePreview(e) {
+    e.preventDefault();
 
-        // Small delay to prevent browser freezing
-        if (i % 5 === 0) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-        }
+    const data = {
+        studentName: document.getElementById('studentName').value,
+        courseName: document.getElementById('courseName').value,
+        lecturerName: document.getElementById('lecturerName').value,
+        issueDate: document.getElementById('issueDate').value,
+        certificateType: document.getElementById('certificateType').value
+    };
 
-      } catch(certError) {
-        console.error('Error generating certificate ' + (i+1) + ':', certError);
-      }
-    }
+    drawCertificate(data);
+    document.getElementById('previewSection').classList.remove('hidden');
+    document.getElementById('generatePdfBtn').disabled = false;
+}
 
-    if (successCount === 0) {
-      showToast('No certificates were generated', 'error');
-      return;
-    }
+function generateSinglePdf() {
+    const canvas = document.getElementById('certificateCanvas');
+    const imgData = canvas.toDataURL('image/png');
 
-    // Generate ZIP and download
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+
+    const studentName = document.getElementById('studentName').value;
+    const courseName = document.getElementById('courseName').value;
+    const filename = (courseName + '_' + studentName).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
+
+    pdf.save(filename);
+    showToast('PDF generated: ' + filename, 'success');
+}
+
+// ========== BULK MODE ==========
+function downloadSampleCsv() {
+    const csv = 'Student Name,Course Name,Lecturer Name,Issue Date,Certificate Type\nJohn Smith,Advanced Python,Dr. Jane Doe,2025-11-16,Completion\nSarah Lee,Web Development,Prof. Bob Smith,2025-11-16,Achievement\nMike Johnson,Data Science,Dr. Anna White,2025-11-16,Excellence';
+
+    const blob = new Blob([csv], { type: 'text/csv' });
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(zipBlob);
-    link.download = 'certificates.zip';
+    link.href = URL.createObjectURL(blob);
+    link.download = 'sample_certificates.csv';
     link.click();
 
-    showToast('Successfully generated ' + successCount + ' of ' + totalCerts + ' certificates!', 'success');
-  } catch (error) {
-    showToast('Error generating certificates: ' + error.message, 'error');
-    console.error('Bulk generation error:', error);
-  } finally {
-    btn.innerHTML = originalText;
-    btn.disabled = false;
-    isGeneratingBulk = false;
-    document.getElementById('progressContainer').style.display = 'none';
-  }
+    showToast('Sample CSV downloaded', 'success');
 }
 
-// Draw certificate on canvas (for bulk generation)
-function drawCertificateOnCanvas(ctx, data) {
-  // Background
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 1122, 794);
+function uploadCsv() {
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
 
-  // Outer border
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 12;
-  ctx.strokeRect(30, 30, 1062, 734);
-
-  // Inner border
-  ctx.strokeStyle = '#b8860b';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(45, 45, 1032, 704);
-
-  // Decorative corners
-  drawDecorativeCorners(ctx);
-
-  // FIXED LOGO: Same aspect ratio handling as preview
-  if (logoImage && logoImage.complete && logoImage.width > 0) {
-    try {
-      const logoMaxWidth = 100;
-      const logoMaxHeight = 100;
-
-      const aspectRatio = logoImage.width / logoImage.height;
-      let logoWidth = logoMaxWidth;
-      let logoHeight = logoMaxHeight;
-
-      if (aspectRatio > 1) {
-        logoHeight = logoMaxWidth / aspectRatio;
-      } else {
-        logoWidth = logoMaxHeight * aspectRatio;
-      }
-
-      const logoX = 561 - (logoWidth / 2);
-      const logoY = 60;
-
-      ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
-    } catch(e) {
-      console.warn('Error drawing logo:', e);
+    if (!file) {
+        showToast('Please select a CSV file', 'error');
+        return;
     }
-  }
 
-  // Certificate title
-  ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'bold 48px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const csv = e.target.result;
+            const lines = csv.trim().split('\n');
 
-  // Decorative line
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(361, 240);
-  ctx.lineTo(761, 240);
-  ctx.stroke();
+            if (lines.length < 2) {
+                showToast('CSV file must have header and at least one row', 'error');
+                return;
+            }
 
-  // Rest of certificate content
-  ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'italic 22px Georgia, serif';
-  ctx.fillText('This certifies that', 561, 300);
+            const headers = lines[0].split(',').map(h => h.trim());
+            const requiredHeaders = ['Student Name', 'Course Name', 'Lecturer Name', 'Issue Date', 'Certificate Type'];
 
-  ctx.font = 'bold 44px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.studentName, 561, 360);
+            const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
+            if (missingHeaders.length > 0) {
+                showToast('Missing columns: ' + missingHeaders.join(', '), 'error');
+                return;
+            }
 
-  const nameWidth = ctx.measureText(data.studentName).width;
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(561 - nameWidth/2 - 15, 370);
-  ctx.lineTo(561 + nameWidth/2 + 15, 370);
-  ctx.stroke();
+            csvDataArray = [];
+            let validCount = 0;
 
-  ctx.font = 'italic 20px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('has successfully completed the course', 561, 410);
+            for (let i = 1; i < lines.length; i++) {
+                const row = lines[i].split(',').map(cell => cell.trim());
 
-  ctx.font = 'bold 32px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.courseName, 561, 460);
+                if (row.length < headers.length) continue;
+                if (!row[0] || !row[1] || !row[2] || !row[3] || !row[4]) continue;
 
-  const courseWidth = ctx.measureText(data.courseName).width;
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(561 - courseWidth/2 - 15, 470);
-  ctx.lineTo(561 + courseWidth/2 + 15, 470);
-  ctx.stroke();
+                csvDataArray.push({
+                    studentName: row[0],
+                    courseName: row[1],
+                    lecturerName: row[2],
+                    issueDate: row[3],
+                    certificateType: row[4]
+                });
+                validCount++;
+            }
 
-  ctx.font = 'italic 18px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('under the instruction of', 561, 520);
+            if (csvDataArray.length === 0) {
+                showToast('No valid rows found in CSV', 'error');
+                return;
+            }
 
-  ctx.font = 'bold 26px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.lecturerName, 561, 560);
+            displayCsvPreview();
+            showToast(validCount + ' valid certificates found', 'success');
 
-  ctx.font = 'italic 18px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  const formattedDate = formatDate(data.issueDate);
-  ctx.fillText('Issued on: ' + formattedDate, 561, 670);
+        } catch(error) {
+            showToast('Error reading CSV: ' + error.message, 'error');
+            console.error(error);
+        }
+    };
 
-  ctx.strokeStyle = '#1a1a2e';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(411, 710);
-  ctx.lineTo(711, 710);
-  ctx.stroke();
-
-  ctx.font = '14px Georgia, serif';
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('Authorized Signature', 561, 730);
+    reader.readAsText(file);
 }
 
+function displayCsvPreview() {
+    const tbody = document.getElementById('csvTableBody');
+    tbody.innerHTML = '';
+
+    csvDataArray.forEach((row, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + (index + 1) + '</td>' +
+            '<td>' + row.studentName + '</td>' +
+            '<td>' + row.courseName + '</td>' +
+            '<td>' + row.lecturerName + '</td>' +
+            '<td>' + row.issueDate + '</td>' +
+            '<td>' + row.certificateType + '</td>';
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('rowCount').textContent = csvDataArray.length;
+    document.getElementById('csvPreviewContainer').classList.remove('hidden');
+}
+
+async function generateAllPdfs() {
+    if (csvDataArray.length === 0) {
+        showToast('No CSV data loaded', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('generateAllBtn');
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+
+    document.getElementById('progressContainer').style.display = 'block';
+
+    try {
+        const zip = new JSZip();
+        const { jsPDF } = window.jspdf;
+        const total = csvDataArray.length;
+
+        for (let i = 0; i < total; i++) {
+            const cert = csvDataArray[i];
+
+            // Create canvas for this certificate
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 3366;  // 1122 * 3
+            tempCanvas.height = 2382; // 794 * 3
+            const ctx = tempCanvas.getContext('2d');
+            ctx.scale(3, 3);
+
+            // Draw certificate
+            drawCertificateOnCanvas(ctx, cert);
+
+            // Convert to PDF
+            const imgData = tempCanvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
+            pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+
+            // Add to ZIP
+            const filename = (cert.courseName + '_' + cert.studentName).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
+            zip.file(filename, pdf.output('blob'));
+
+            // Update progress
+            const progress = Math.round(((i + 1) / total) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = progress + '%';
+            document.getElementById('progressText').textContent = 'Generated ' + (i + 1) + ' of ' + total;
+
+            // Small delay to prevent freezing
+            if (i % 10 === 0) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+        }
+
+        // Download ZIP
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(zipBlob);
+        link.download = 'certificates.zip';
+        link.click();
+
+        showToast('Generated ' + total + ' certificates!', 'success');
+
+    } catch(error) {
+        showToast('Error: ' + error.message, 'error');
+        console.error(error);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🎯 Generate All PDFs (ZIP)';
+        document.getElementById('progressContainer').style.display = 'none';
+    }
+}
+
+// ========== DRAWING FUNCTIONS ==========
+function drawCertificate(data) {
+    const canvas = document.getElementById('certificateCanvas');
+    drawCertificateImpl(canvas, data, 3);
+}
+
+function drawCertificateOnCanvas(ctx, data) {
+    drawCertificateCore(ctx, data);
+}
+
+function drawCertificateImpl(canvas, data, scale) {
+    canvas.width = 1122 * scale;
+    canvas.height = 794 * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    drawCertificateCore(ctx, data);
+}
+
+function drawCertificateCore(ctx, data) {
+    // Background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 1122, 794);
+
+    // Outer gold border
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 12;
+    ctx.strokeRect(30, 30, 1062, 734);
+
+    // Inner border
+    ctx.strokeStyle = '#b8860b';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(45, 45, 1032, 704);
+
+    // Draw logo
+    if (logoImage && logoImage.complete) {
+        try {
+            const logoMaxSize = 100;
+            const ratio = logoImage.width / logoImage.height;
+            let w = logoMaxSize, h = logoMaxSize;
+
+            if (ratio > 1) h = w / ratio;
+            else w = h * ratio;
+
+            ctx.drawImage(logoImage, 561 - w/2, 60, w, h);
+        } catch(e) {}
+    }
+
+    // Title
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'bold 48px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
+
+    // Line
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(361, 240);
+    ctx.lineTo(761, 240);
+    ctx.stroke();
+
+    // Text
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'italic 20px Georgia, serif';
+    ctx.fillText('This certifies that', 561, 290);
+
+    // Student name
+    ctx.font = 'bold 44px Georgia, serif';
+    ctx.fillText(data.studentName, 561, 350);
+
+    // Underline
+    const nameWidth = ctx.measureText(data.studentName).width;
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(561 - nameWidth/2 - 15, 360);
+    ctx.lineTo(561 + nameWidth/2 + 15, 360);
+    ctx.stroke();
+
+    // Course text
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'italic 18px Georgia, serif';
+    ctx.fillText('has successfully completed the course', 561, 400);
+
+    // Course name
+    ctx.font = 'bold 32px Georgia, serif';
+    ctx.fillText(data.courseName, 561, 450);
+
+    // Course underline
+    const courseWidth = ctx.measureText(data.courseName).width;
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(561 - courseWidth/2 - 15, 460);
+    ctx.lineTo(561 + courseWidth/2 + 15, 460);
+    ctx.stroke();
+
+    // Lecturer text
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'italic 18px Georgia, serif';
+    ctx.fillText('under the instruction of', 561, 510);
+
+    // Lecturer name
+    ctx.font = 'bold 26px Georgia, serif';
+    ctx.fillText(data.lecturerName, 561, 550);
+
+    // Date
+    ctx.font = 'italic 16px Georgia, serif';
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillText('Issued: ' + data.issueDate, 561, 650);
+
+    // Signature line
+    ctx.strokeStyle = '#1a1a2e';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(411, 700);
+    ctx.lineTo(711, 700);
+    ctx.stroke();
+
+    ctx.font = '12px Georgia, serif';
+    ctx.fillText('Authorized Signature', 561, 720);
+}
+
+// ========== UTILITY ==========
 function showToast(message, type) {
-  if (!type) type = 'info';
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.textContent = message;
+    document.body.appendChild(toast);
 
-  const container = document.getElementById('toastContainer');
-  if (!container) return;
-
-  const toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  toast.textContent = message;
-
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.style.animation = 'slideIn 0.3s ease reverse';
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
+    setTimeout(() => toast.remove(), 3000);
 }
     </script>
 </body>
