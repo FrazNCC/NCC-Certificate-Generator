@@ -38,4 +38,5 @@ For bulk certificates, prepare a CSV file with these columns:
 - Mobile browsers
 
 ## License
-MIT License - Free to use and modify
+MIT License - Get Authorisation from the creator 
+Any use without authorisation will be considered as a misuse.
