@@ -734,7 +734,7 @@ function drawCertificateCore(ctx, data) {
     // ============ LOGO (CENTERED AT TOP) ============
     if (logoImage && logoImage.complete) {
         try {
-            const logoMaxSize = 300;
+            const logoMaxSize = 400;
             const ratio = logoImage.width / logoImage.height;
             let w = logoMaxSize, h = logoMaxSize;
 
@@ -830,19 +830,7 @@ function drawCertificateCore(ctx, data) {
     ctx.fillStyle = '#1a1a2e';
     ctx.fillText('Issued: ' + data.issueDate, 561, 640);
 
-    // Signature line - CENTERED
-    ctx.strokeStyle = '#1a1a2e';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(411, 700);
-    ctx.lineTo(711, 700);
-    ctx.stroke();
-
-    // "Authorized Signature" text - CENTERED
-    ctx.font = '12px Georgia, serif';
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillText('Authorized Signature', 561, 720);
-}
+   }
 
 // Decorative corners
 function drawDecorativeCorners(ctx) {
