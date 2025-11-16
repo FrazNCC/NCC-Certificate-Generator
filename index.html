@@ -123,30 +123,30 @@ function drawCertificate(data) {
     // Main Title
     ctx.textAlign = 'center';
     ctx.fillStyle = '#bda054';
-    ctx.font = '700 32px Merriweather, serif';
-    ctx.fillText(data.certificateType ? ('CERTIFICATE OF ' + data.certificateType.toUpperCase()) : 'CERTIFICATE', 561, 150);
+    ctx.font = '1000 32px Merriweather, serif';
+    ctx.fillText(data.certificateType ? ('CERTIFICATE OF ' + data.certificateType.toUpperCase()) : 'CERTIFICATE', 561, 200);
     // Subtitle
     ctx.font = '400 20px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText('This certificate is proudly presented to', 561, 192);
+    ctx.fillText('This certificate is proudly presented to', 561, 250);
     // Name - large script
     ctx.font = '700 59px "Dancing Script", cursive'; ctx.fillStyle = '#23335c';
-    ctx.fillText(data.studentName || 'Student Name', 561, 258);
+    ctx.fillText(data.studentName || 'Student Name', 561, 300);
     // Helper text
     ctx.font = '400 20px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 302);
+    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 350);
     // Course - gold
     ctx.font = 'italic 29px Merriweather, serif'; ctx.fillStyle = '#bda054';
-    ctx.fillText(data.courseName || 'Course Title', 561, 348);
+    ctx.fillText(data.courseName || 'Course Title', 561, 400);
     // Bottom: TUTOR left, (no ID) seal center, date right
     // Tutor
-    ctx.font = 'bold 17px Merriweather, serif'; ctx.fillStyle = '#23335c'; ctx.textAlign = 'left';
+    ctx.font = 'bold 60px Merriweather, serif'; ctx.fillStyle = '#23335c'; ctx.textAlign = 'left';
     ctx.fillText(data.lecturerName || 'Dr. John Smith', 78, 680);
     ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad';
     ctx.fillText('TUTOR / LECTURER', 78, 697);
     // NCC SEAL at BOTTOM/CENTER
     drawNCCSeal(ctx, 561, 678, 55);
     // Date (blue bold)
-    ctx.textAlign = 'right'; ctx.font = 'bold 17px Merriweather, serif'; ctx.fillStyle = '#23335c';
+    ctx.textAlign = 'right'; ctx.font = 'bold 60px Merriweather, serif'; ctx.fillStyle = '#23335c';
     ctx.fillText(data.issueDate || '2025-11-16', 1045, 680);
     ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad'; ctx.fillText('DATE OF ISSUE', 1045, 697);
 }
