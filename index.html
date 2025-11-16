@@ -1,166 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generator - Professional</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; padding: 20px;
-        }
-        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
-        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px 30px; text-align: center; }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
-        .nav-tabs { display: flex; background: #f8f9fa; border-bottom: 2px solid #dee2e6; }
-        .nav-tab { flex: 1; padding: 20px; text-align: center; background: none; border: none; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: #495057; }
-        .nav-tab:hover { background: #e9ecef; }
-        .nav-tab.active { background: white; color: #667eea; border-bottom: 3px solid #667eea; margin-bottom: -2px; }
-        .tab-content { padding: 40px; }
-        .hidden { display: none !important; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-right: 10px; margin-bottom: 10px; }
-        .btn-primary {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;}
-        .btn-primary:hover {transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4);}
-        .btn-success {background: #28a745; color: white;}
-        .btn-success:hover {background: #218838;}
-        .btn:disabled {opacity: 0.5; cursor: not-allowed;}
-        #previewSection {margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 10px; text-align: center;}
-        #certificateCanvas {max-width: 100%; height: auto; border: 3px solid #dee2e6; border-radius: 8px; margin: 20px 0; background: white;}
-        .button-group {display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;}
-        @media (max-width: 768px) {.tab-content { padding: 20px; }.button-group {flex-direction: column;}.btn {width: 100%;}}
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elegant Certificate Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Crimson+Pro:ital,wght@0,400;1,400;1,700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    body { background: #e9edf3; font-family: 'Roboto', Arial, sans-serif; min-height: 100vh; padding: 30px; }
+    .container { max-width: 1200px; margin: 0 auto; background: #fff; border-radius: 15px; box-shadow: 0 6px 36px rgba(0,0,0,.14); overflow: hidden; }
+    .header { text-align: center; padding: 28px 12px 8px; background: none; }
+    .header h1 { font-size: 2.1em; font-family: 'Playfair Display', serif; letter-spacing: 1px; font-weight: bold; color: #444; }
+    .tab-content { padding: 30px; }
+    #certificateCanvas { display:block; margin: 0 auto; background: #fffefc; border: 2px solid #333; box-shadow: 0 2px 16px #e5cfa7; border-radius: 8px; }
+    .btn { margin-top: 14px; padding: 10px 28px; background: linear-gradient(90deg,#cab87c 0%,#917c2b 100%); color:white; border:none; border-radius:7px; font-weight:600; cursor:pointer; font-size:1em;}
+    .btn:active{transform: scale(.98);}
+    .form-group { margin-bottom: 14px; }
+    label { font-weight: 600; font-size: 1em; margin-bottom: 6px; display: block; color: #222;}
+    input, select { width: 100%; padding: 10px 12px; border-radius: 7px; border: 1.5px solid #b8b5a7; margin-top:3px; }
+    @media (max-width:700px) {.tab-content {padding:12px;}}
+  </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <h1>🎓 Certificate Generator</h1>
-        <p>Professional Certificate Generation - Single or Bulk Mode</p>
+  <div class="header">
+    <h1>Elegant Certificate Generator</h1>
+  </div>
+  <div class="tab-content">
+    <form id="singleForm">
+      <div class="form-group"><label for="studentName">Presented To (Name)</label><input type="text" id="studentName" required></div>
+      <div class="form-group"><label for="courseName">Course Title</label><input type="text" id="courseName" required></div>
+      <div class="form-group"><label for="lecturerName">Lecturer Name</label><input type="text" id="lecturerName" required></div>
+      <div class="form-group"><label for="issueDate">Date of Issue</label><input type="date" id="issueDate" required></div>
+      <div class="form-group"><label for="certificateType">Certificate Type</label><select id="certificateType"><option value="ACHIEVEMENT">Certificate of Achievement</option><option value="COMPLETION">Certificate of Completion</option><option value="EXCELLENCE">Certificate of Excellence</option></select></div>
+      <button type="submit" class="btn">Preview Certificate</button>
+    </form>
+    <div id="previewSection" style="margin-top:28px; display:none; text-align: center;">
+      <canvas id="certificateCanvas" width="1400" height="1000" style="max-width:100%;"></canvas>
+      <div><button id="downloadBtn" class="btn">Download PDF</button></div>
     </div>
-    <div class="nav-tabs">
-        <button class="nav-tab active" data-tab="single">Single Certificate</button>
-        <button class="nav-tab" data-tab="bulk">Bulk Certificates</button>
-    </div>
-    <div id="singleTab" class="tab-content">
-        <h2 style="margin-bottom: 20px; color: #333;">Generate Single Certificate</h2>
-        <form id="singleForm">
-            <div class="form-group"><label for="studentName">Student Name</label><input type="text" id="studentName" required></div>
-            <div class="form-group"><label for="courseName">Course Name</label><input type="text" id="courseName" required></div>
-            <div class="form-group"><label for="lecturerName">Lecturer Name</label><input type="text" id="lecturerName" required></div>
-            <div class="form-group"><label for="issueDate">Issue Date</label><input type="date" id="issueDate" required></div>
-            <div class="form-group"><label for="certificateType">Certificate Type</label><select id="certificateType" required><option value="Completion">Certificate of Completion</option><option value="Achievement">Certificate of Achievement</option><option value="Excellence">Certificate of Excellence</option></select></div>
-            <div class="button-group"><button type="submit" class="btn btn-primary">Preview Certificate</button></div>
-        </form>
-        <div id="previewSection" class="hidden">
-            <h3>Certificate Preview</h3>
-            <canvas id="certificateCanvas"></canvas>
-            <div class="button-group"><button id="generatePdfBtn" class="btn btn-success">Generate PDF</button></div>
-        </div>
-    </div>
+  </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
-let logoImage = null;
-function loadLogo() { logoImage = new Image(); logoImage.src = 'logo-1.png'; logoImage.crossOrigin = "Anonymous"; }
-window.addEventListener('DOMContentLoaded', function(){loadLogo();setDefaultDate();setupEventListeners();});
-function setDefaultDate() { document.getElementById('issueDate').value = new Date().toISOString().split('T')[0]; }
-function setupEventListeners() {
-    document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.addEventListener('click', e => {
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            e.target.classList.add('active');
-            document.getElementById('singleTab').classList.add('hidden');
-            if (e.target.dataset.tab === 'single') document.getElementById('singleTab').classList.remove('hidden');
-            else document.getElementById('bulkTab').classList.remove('hidden');
-        });
-    });
-    document.getElementById('singleForm').addEventListener('submit', handlePreview);
-    document.getElementById('generatePdfBtn').addEventListener('click', generateSinglePdf);
+const sealPalette = ['#d6ad60', '#fff6ca', '#8c731c'];
+
+function drawSeal(ctx, cx, cy, r) {
+ ctx.save();
+ ctx.translate(cx, cy);
+ ctx.rotate(Math.PI/18);
+ ctx.beginPath();
+ for(let i=0;i<16;i++){
+   ctx.lineTo(r * Math.cos(Math.PI/8 * i), r * Math.sin(Math.PI/8 * i));
+   ctx.lineTo((r-18) * Math.cos(Math.PI/8 * i + Math.PI/16), (r-18) * Math.sin(Math.PI/8 * i + Math.PI/16));
+ }
+ ctx.closePath();
+ ctx.fillStyle = sealPalette[0];
+ ctx.shadowColor = "rgba(100,80,30,0.30)";
+ ctx.shadowBlur = 10;
+ ctx.fill();
+ ctx.shadowBlur = 0;
+ // ring
+ ctx.beginPath(); ctx.arc(0,0,r-25,0,2*Math.PI);
+ ctx.fillStyle=sealPalette[1]; ctx.fill();
+ // main circle
+ ctx.beginPath(); ctx.arc(0,0,r-35,0,2*Math.PI);
+ ctx.fillStyle=sealPalette[0]; ctx.fill();
+ ctx.restore();
+ // NCC text
+ ctx.save();ctx.translate(cx,cy);
+ ctx.fillStyle=sealPalette[2];
+ ctx.font="bold 40px Playfair Display, serif";
+ ctx.textAlign="center";ctx.textBaseline="middle";
+ ctx.fillText("NCC",0,5);
+ ctx.restore();
 }
-function handlePreview(e) {
-    e.preventDefault();
-    const data = {
-        studentName: document.getElementById('studentName').value,
-        courseName: document.getElementById('courseName').value,
-        lecturerName: document.getElementById('lecturerName').value,
-        issueDate: document.getElementById('issueDate').value,
-        certificateType: document.getElementById('certificateType').value
-    };
-    drawCertificate(data); document.getElementById('previewSection').classList.remove('hidden');
-    document.getElementById('generatePdfBtn').disabled = false;
+
+function titleCase(str) {
+ return String(str||"").replace(/\w\S*/g, t=>t.charAt(0).toUpperCase()+t.substr(1).toLowerCase());
 }
-function generateSinglePdf() {
-    const canvas = document.getElementById('certificateCanvas');
-    const imgData = canvas.toDataURL('image/png');
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
-    const studentName = document.getElementById('studentName').value;
-    const courseName = document.getElementById('courseName').value;
-    const filename = (courseName + '_' + studentName).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
-    pdf.save(filename);
+
+function drawElegantCertificate(data) {
+ const canvas = document.getElementById("certificateCanvas");
+ const ctx = canvas.getContext("2d");
+ // background
+ ctx.fillStyle="#fffef8"; ctx.fillRect(0,0,canvas.width,canvas.height);
+ // subtle stripes
+ for(let i=0;i<canvas.height;i+=20){ctx.fillStyle=`rgba(220,205,150,.035)`;ctx.fillRect(0,i,canvas.width,10);}
+ // Border
+ ctx.strokeStyle="#33466b"; ctx.lineWidth=6;ctx.strokeRect(18,18,canvas.width-36,canvas.height-36);
+ ctx.strokeStyle="#cab87c";ctx.lineWidth=2;ctx.strokeRect(32,32,canvas.width-64,canvas.height-64);
+ // Logo at top
+ if(window.logoImg && window.logoImg.complete){ctx.drawImage(window.logoImg,canvas.width/2-60,48,120,54);}
+ // Title
+ ctx.font="bold 37px Playfair Display, serif";
+ ctx.fillStyle="#b1975b"; ctx.textAlign="center"; ctx.fillText(`CERTIFICATE OF ${data.certificateType.toUpperCase()}`,canvas.width/2,160);
+ // Subtitle
+ ctx.font="italic 22px Crimson Pro, serif";
+ ctx.fillStyle="#234"; ctx.fillText("This certificate is proudly presented to",canvas.width/2,210);
+ // Student Name - script font, large
+ ctx.font="48px Great Vibes, cursive";
+ ctx.fillStyle="#12375b";
+ ctx.fillText(titleCase(data.studentName),canvas.width/2,285);
+ // body text, smaller
+ ctx.font="20px Crimson Pro,serif";
+ ctx.fillStyle="#234";
+ ctx.fillText("for successfully demonstrating proficiency and completing all the requirements of the course",canvas.width/2,335);
+ // Course name - gold, italic
+ ctx.font = "bold italic 30px Playfair Display, serif";
+ ctx.fillStyle = "#b1975b";
+ ctx.fillText(titleCase(data.courseName),canvas.width/2,380);
+ // Bottom section
+ // Left: Lecturer name, bold, blue
+ ctx.font = "20px Playfair Display, serif";
+ ctx.fillStyle="#274085"; ctx.textAlign="left";
+ ctx.fillText(titleCase(data.lecturerName), 70, 920);
+ ctx.font = "14px Crimson Pro, serif"; ctx.fillStyle="#7b7d80";
+ ctx.fillText("TUTOR / LECTURER", 70, 940);
+ // Right: Date, bold, blue
+ ctx.font = "20px Playfair Display, serif"; ctx.fillStyle="#274085"; ctx.textAlign="right";
+ ctx.fillText(data.issueDate, canvas.width-70, 920);
+ ctx.font = "14px Crimson Pro, serif"; ctx.fillStyle="#7b7d80";
+ ctx.fillText("DATE OF ISSUE", canvas.width-70, 940);
+ // Middle Bottom: Seal, ID
+ drawSeal(ctx, canvas.width/2, 885, 57);
+ ctx.font = "15px Crimson Pro, serif"; ctx.fillStyle="#b7b2a1"; ctx.textAlign="center";
+ ctx.fillText("ID: PREVIUM-ID-12345", canvas.width/2, 970);
 }
-function drawCertificate(data) {
-    const canvas = document.getElementById('certificateCanvas');
-    canvas.width = 1122 * 3; canvas.height = 794 * 3; const scale = 3;
-    const ctx = canvas.getContext('2d'); ctx.scale(scale, scale);
-    ctx.fillStyle = '#fffef9'; ctx.fillRect(0,0,1122,794);
-    const gradient = ctx.createLinearGradient(0,0,1122,794);
-    gradient.addColorStop(0,'rgba(212,175,55,0.02)'); gradient.addColorStop(1,'rgba(26,58,82,0.02)');
-    ctx.fillStyle = gradient; ctx.fillRect(0,0,1122,794);
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 12; ctx.strokeRect(30,30,1062,734);
-    ctx.strokeStyle = '#b8860b'; ctx.lineWidth = 2; ctx.strokeRect(45,45,1032,704);
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 1; ctx.strokeRect(50,50,1022,694);
-    drawDecorativeCorners(ctx);
-    if (logoImage && logoImage.complete) {
-        try {
-            const logoMaxSize = 300, ratio = logoImage.width / logoImage.height;
-            let w = logoMaxSize, h = logoMaxSize;
-            if (ratio > 1) h = w / ratio; else w = h * ratio;
-            const logoX = 561 - w/2, logoY = 65;
-            ctx.drawImage(logoImage, logoX, logoY, w, h);
-        } catch(e) {}
-    }
-    // Adjusted Y values:
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#1a1a2e';
-    ctx.font = 'bold 46px Arial, Segoe UI, sans-serif';
-    ctx.fillText('Certificate of ' + data.certificateType, 561, 400);
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(361, 420); ctx.lineTo(761, 420); ctx.stroke();
-    ctx.font = 'italic 22px Segoe UI, Arial, sans-serif'; ctx.fillStyle = '#1a1a2e'; ctx.fillText('This certifies that', 561, 440);
-    ctx.font = 'bold 44px Segoe UI, Arial, sans-serif'; ctx.fillText(data.studentName, 561, 480);
-    let nameWidth = ctx.measureText(data.studentName).width;
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(561 - nameWidth/2 - 15, 488); ctx.lineTo(561 + nameWidth/2 + 15, 488); ctx.stroke();
-    ctx.font = 'italic 20px Segoe UI, Arial, sans-serif'; ctx.fillText('for successfully demonstrating proficiency and completing',561,520);
-    ctx.fillText('all the requirements of the course',561,540);
-    ctx.font = 'bold 30px Segoe UI, Arial, sans-serif'; ctx.fillText(data.courseName,561,570);
-    let courseWidth = ctx.measureText(data.courseName).width;
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(561-courseWidth/2-15,580); ctx.lineTo(561+courseWidth/2+15,580); ctx.stroke();
-    // Footer at the bottom inside border
-    ctx.font = 'italic 18px Segoe UI, Arial, sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText('under the instruction of', 1055, 714);
-    ctx.font = 'bold 21px Segoe UI, Arial, sans-serif';
-    ctx.fillText(data.lecturerName, 1055, 744);
-    ctx.font = 'italic 17px Segoe UI, Arial, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText('Issued: ' + data.issueDate, 68, 744);
-}
-function drawDecorativeCorners(ctx) {
-    const cornerSize = 40, offset = 50; ctx.strokeStyle='#d4af37'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(offset + cornerSize, offset); ctx.lineTo(offset, offset); ctx.lineTo(offset, offset + cornerSize); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(1122 - offset - cornerSize, offset); ctx.lineTo(1122 - offset, offset); ctx.lineTo(1122 - offset, offset + cornerSize); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(offset, 794-offset-cornerSize); ctx.lineTo(offset,794-offset); ctx.lineTo(offset+cornerSize,794-offset); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(1122-offset, 794-offset-cornerSize); ctx.lineTo(1122-offset, 794-offset); ctx.lineTo(1122-offset-cornerSize, 794-offset); ctx.stroke();
-}
+// Logo img load
+window.logoImg = new window.Image();window.logoImg.src="logo-1.png";
+// Form
+const form = document.getElementById("singleForm");
+form.addEventListener("submit",e=>{
+  e.preventDefault();
+  const certData = {
+    studentName: document.getElementById("studentName").value,
+    courseName: document.getElementById("courseName").value,
+    lecturerName: document.getElementById("lecturerName").value,
+    issueDate: document.getElementById("issueDate").value,
+    certificateType: document.getElementById("certificateType").selectedOptions[0].text.split(' ').pop()
+  };
+  document.getElementById("previewSection").style.display="block";
+  drawElegantCertificate(certData);
+});
+document.getElementById("downloadBtn").addEventListener("click",()=>{
+  const canvas = document.getElementById("certificateCanvas");
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new window.jspdf.jsPDF({orientation:'landscape',unit:'pt',format:[canvas.width,canvas.height]});
+  pdf.addImage(imgData,"PNG",0,0,canvas.width,canvas.height);
+  pdf.save("certificate.pdf");
+});
 </script>
-</body></html>
+</body>
+</html>
