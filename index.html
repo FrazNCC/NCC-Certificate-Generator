@@ -115,13 +115,15 @@ function drawCertificate(data) {
     ctx.fillStyle = '#fdfcf8'; ctx.fillRect(22,22,1078,750);
     // Logo at top
     if (logoImage && logoImage.complete) { try {
-        const logoMaxWidth = 100; const logoMaxHeight = 36;
+        const logoMaxWidth = 300; const logoMaxHeight = 200;
         const ar = logoImage.width/logoImage.height;
         let width = logoMaxWidth, height = logoMaxHeight;
         if (ar > 1) height = width / ar; else width = height * ar;
         ctx.drawImage(logoImage, 561-width/2, 48, width, height);
     } catch(e){} }
     // Main Title
+    //
+    //
     ctx.textAlign = 'center';
     ctx.fillStyle = '#bda054';
     ctx.font = '700 32px Merriweather, serif';
