@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generator - Professional</title>
+    <title>NCC Certificate Generator</title>
     <style>
         * {
             margin: 0;
@@ -328,7 +328,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎓 Certificate Generator</h1>
+            <h1>NCC Certificate Generator</h1>
             <p>Professional Certificate Generation - Single or Bulk Mode</p>
         </div>
 
@@ -525,7 +525,7 @@ function generateSinglePdf() {
         format: 'a4'
     });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+    pdf.addImage(imgData, 'PNG', 0, 0, 497, 410);
 
     const studentName = document.getElementById('studentName').value;
     const courseName = document.getElementById('courseName').value;
