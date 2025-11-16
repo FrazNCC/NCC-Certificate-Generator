@@ -742,7 +742,7 @@ function drawCertificateCore(ctx, data) {
     // Draw logo
     if (logoImage && logoImage.complete) {
         try {
-            const logoMaxSize = 100;
+            const logoMaxSize = 400;
             const ratio = logoImage.width / logoImage.height;
             let w = logoMaxSize, h = logoMaxSize;
 
@@ -757,8 +757,9 @@ function drawCertificateCore(ctx, data) {
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'bold 48px Georgia, serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
+    ctx.fillText('Certificate of ' + data.certificateType, 661, 320);
 
+    
     // Line
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
@@ -767,15 +768,18 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(761, 240);
     ctx.stroke();
 
+    
     // Text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 20px Georgia, serif';
     ctx.fillText('This certifies that', 561, 290);
 
+    
     // Student name
     ctx.font = 'bold 44px Georgia, serif';
     ctx.fillText(data.studentName, 561, 350);
 
+    
     // Underline
     const nameWidth = ctx.measureText(data.studentName).width;
     ctx.strokeStyle = '#d4af37';
@@ -785,15 +789,18 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(561 + nameWidth/2 + 15, 360);
     ctx.stroke();
 
+    
     // Course text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
     ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 400);
 
+    
     // Course name
     ctx.font = 'bold 32px Georgia, serif';
     ctx.fillText(data.courseName, 561, 450);
 
+    
     // Course underline
     const courseWidth = ctx.measureText(data.courseName).width;
     ctx.strokeStyle = '#d4af37';
@@ -803,15 +810,18 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(561 + courseWidth/2 + 15, 460);
     ctx.stroke();
 
+    
     // Lecturer text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
     ctx.fillText('under the instruction of', 561, 510);
 
+    
     // Lecturer name
     ctx.font = 'bold 26px Georgia, serif';
     ctx.fillText(data.lecturerName, 561, 550);
 
+    
     // Date
     ctx.font = 'italic 16px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
