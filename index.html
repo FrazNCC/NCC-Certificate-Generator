@@ -788,7 +788,7 @@ function drawCertificateCore(ctx, data) {
     // Course text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
-    ctx.fillText('has successfully completed the course', 561, 400);
+    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 400);
 
     // Course name
     ctx.font = 'bold 32px Georgia, serif';
@@ -817,17 +817,7 @@ function drawCertificateCore(ctx, data) {
     ctx.fillStyle = '#1a1a2e';
     ctx.fillText('Issued: ' + data.issueDate, 561, 650);
 
-    // Signature line
-    ctx.strokeStyle = '#1a1a2e';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(411, 700);
-    ctx.lineTo(711, 700);
-    ctx.stroke();
-
-    ctx.font = '12px Georgia, serif';
-    ctx.fillText('Authorized Signature', 561, 720);
-}
+   }
 
 // ========== UTILITY ==========
 function showToast(message, type) {
