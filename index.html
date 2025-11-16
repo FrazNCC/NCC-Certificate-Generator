@@ -127,33 +127,32 @@ function drawCertificate(data) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#bda054';
     ctx.font = '700 32px Merriweather, serif';
-    ctx.fillText(data.certificateType ? ('CERTIFICATE OF ' + data.certificateType.toUpperCase()) : 'CERTIFICATE', 561, 120);
+    ctx.fillText(data.certificateType ? ('CERTIFICATE OF ' + data.certificateType.toUpperCase()) : 'CERTIFICATE', 561, 200);
     // Subtitle
     ctx.font = '400 20px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText('This certificate is proudly presented to', 561, 162);
+    ctx.fillText('This certificate is proudly presented to', 561, 250);
     // Name - large script
     ctx.font = '700 54px "Dancing Script", cursive'; ctx.fillStyle = '#23335c';
-    ctx.fillText(data.studentName || 'Student Name', 561, 225);
+    ctx.fillText(data.studentName || 'Student Name', 561, 300);
     // Helper text
     ctx.font = '400 19px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 270);
+    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 350);
     // Course - gold
     ctx.font = 'italic 28px Merriweather, serif'; ctx.fillStyle = '#bda054';
-    ctx.fillText(data.courseName || 'Course Title', 561, 315);
+    ctx.fillText(data.courseName || 'Course Title', 561, 400);
     // Bottom: TUTOR left, ID/seal center, date right
     // Tutor (name bold blue)
     ctx.font = 'bold 17px Merriweather, serif'; ctx.fillStyle = '#23335c'; ctx.textAlign = 'left';
     ctx.fillText(data.lecturerName || 'Dr. John Smith', 80, 670);
     ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad';
-    ctx.fillText('TUTOR / LECTURER', 80, 687);
+    ctx.fillText('TUTOR / LECTURER', 80, 695);
     // NCC SEAL at BOTTOM/CENTER
     drawNCCSeal(ctx, 561, 690, 56);
     ctx.textAlign = 'center'; ctx.font = 'normal 10px Merriweather, serif'; ctx.fillStyle = '#a2a3ad';
-    ctx.fillText('ID: PREVLM-ID-12345', 561, 745);
-    // Date (blue bold)
+       // Date (blue bold)
     ctx.textAlign = 'right'; ctx.font = 'bold 17px Merriweather, serif'; ctx.fillStyle = '#23335c';
     ctx.fillText(data.issueDate || '2025-11-16', 1045, 670);
-    ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad'; ctx.fillText('DATE OF ISSUE', 1045, 687);
+    ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad'; ctx.fillText('DATE OF ISSUE', 1045, 695);
 }
 function drawNCCSeal(ctx, cx, cy, r) {
     // Gold starburst
