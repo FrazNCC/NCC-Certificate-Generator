@@ -750,11 +750,15 @@ function drawCertificateCore(ctx, data) {
     // ============ MAIN CONTENT - ALL CENTERED ============
     ctx.textAlign = 'center';
 
+
+    
     // Certificate title - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'bold 48px Georgia, serif';
     ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
 
+
+    
     // Decorative line under title
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
@@ -763,16 +767,22 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(761, 240);
     ctx.stroke();
 
+
+    
     // "This certifies that" text - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 20px Georgia, serif';
     ctx.fillText('This certifies that', 561, 290);
 
+
+    
     // Student name - CENTERED & BOLD
     ctx.font = 'bold 44px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
     ctx.fillText(data.studentName, 561, 350);
 
+
+    
     // Underline for student name
     const nameWidth = ctx.measureText(data.studentName).width;
     ctx.strokeStyle = '#d4af37';
@@ -782,20 +792,28 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(561 + nameWidth/2 + 15, 360);
     ctx.stroke();
 
+
+    
     // "for successfully demonstrating..." text - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
     // Split long text into multiple lines
     wrapText(ctx, 'for successfully demonstrating proficiency and completing', 561, 400, 500);
 
+
+    
     // "all the requirements of the course" - CENTERED
     ctx.fillText('all the requirements of the course', 561, 420);
 
+
+    
     // Course name - CENTERED & BOLD
     ctx.font = 'bold 32px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
     ctx.fillText(data.courseName, 561, 470);
 
+
+    
     // Underline for course
     const courseWidth = ctx.measureText(data.courseName).width;
     ctx.strokeStyle = '#d4af37';
@@ -805,11 +823,15 @@ function drawCertificateCore(ctx, data) {
     ctx.lineTo(561 + courseWidth/2 + 15, 480);
     ctx.stroke();
 
+
+    
     // "under the instruction of" text - CENTERED
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
     ctx.fillText('under the instruction of', 561, 530);
 
+
+    
     // Lecturer name - CENTERED & BOLD
     ctx.font = 'bold 26px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
