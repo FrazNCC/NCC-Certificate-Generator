@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generator - Sample Style</title>
+    <title>Certificate Generator - Modern Layout</title>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', Arial, sans-serif; background: linear-gradient(135deg, #fff 0%, #e8eaef 100%); min-height: 100vh; padding: 20px; }
+        body { font-family: 'Montserrat', Arial, sans-serif; background: #f8f8f5; min-height: 100vh; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: #23335c; color: white; padding: 40px 30px 20px 30px; text-align: center; }
+        .header { background: #23335c; color: white; padding: 40px 30px 24px 30px; text-align: center; }
         .header h1 { font-size: 2.5em; margin-bottom: 6px; font-weight: 700; letter-spacing: 1px; }
         .nav-tabs { display: flex; background: #f8f9fa; border-bottom: 2px solid #dee2e6; }
         .nav-tab { flex: 1; padding: 20px; text-align: center; background: none; border: none; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: #495057; }
@@ -27,7 +27,7 @@
         .btn-success:hover {background: #218838;}
         .btn:disabled {opacity: 0.5; cursor: not-allowed;}
         #previewSection {margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 10px; text-align: center;}
-        #certificateCanvas {max-width: 100%; height: auto; border: 2px solid #bda054; border-radius: 8px; margin: 20px 0; background: white;}
+        #certificateCanvas {max-width: 100%; height: auto; border: 2px solid #bda054; border-radius: 8px; margin: 20px 0; background: #fff;}
         .button-group {display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;}
         @media (max-width: 768px) {.tab-content { padding: 20px; }.button-group {flex-direction: column;}.btn {width: 100%;}}
     </style>
@@ -36,7 +36,7 @@
 <div class="container">
     <div class="header">
         <h1>🎓 Certificate Generator</h1>
-        <p>Professional Certificate Generation - Sample Style</p>
+        <p>Modern Certificate Layout</p>
     </div>
     <div class="nav-tabs">
         <button class="nav-tab active" data-tab="single">Single Certificate</button>
@@ -63,7 +63,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
-// Google Fonts loaded in HEAD
 let logoImage = null;
 function loadLogo() { logoImage = new Image(); logoImage.src = 'logo-1.png'; logoImage.crossOrigin = "Anonymous"; }
 window.addEventListener('DOMContentLoaded', function(){loadLogo();setDefaultDate();setupEventListeners();});
@@ -110,76 +109,65 @@ function drawCertificate(data) {
     const ctx = canvas.getContext('2d'); ctx.scale(scale, scale);
     // Outer border
     ctx.strokeStyle = '#23335c'; ctx.lineWidth = 3; ctx.strokeRect(10,10,1102,774);
-    ctx.strokeStyle = '#bda054'; ctx.lineWidth = 1; ctx.strokeRect(20,20,1082,754);
+    ctx.strokeStyle = '#bda054'; ctx.lineWidth = 1.3; ctx.strokeRect(20,20,1082,754);
     // Background
     ctx.fillStyle = '#fdfcf8'; ctx.fillRect(22,22,1078,750);
-    // Logo at top
+    // Logo at top (max 300)
     if (logoImage && logoImage.complete) { try {
-        const logoMaxWidth = 300; const logoMaxHeight = 200;
+        const logoMaxWidth = 300; const logoMaxHeight = 80;
         const ar = logoImage.width/logoImage.height;
         let width = logoMaxWidth, height = logoMaxHeight;
         if (ar > 1) height = width / ar; else width = height * ar;
-        ctx.drawImage(logoImage, 561-width/2, 48, width, height);
+        ctx.drawImage(logoImage, 561-width/2, 38, width, height);
     } catch(e){} }
     // Main Title
-    //
-    //
     ctx.textAlign = 'center';
     ctx.fillStyle = '#bda054';
     ctx.font = '700 32px Merriweather, serif';
-    ctx.fillText(data.certificateType ? ('CERTIFICATE OF ' + data.certificateType.toUpperCase()) : 'CERTIFICATE', 561, 200);
+    ctx.fillText(data.certificateType ? ('CERTIFICATE OF ' + data.certificateType.toUpperCase()) : 'CERTIFICATE', 561, 150);
     // Subtitle
     ctx.font = '400 20px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText('This certificate is proudly presented to', 561, 250);
+    ctx.fillText('This certificate is proudly presented to', 561, 192);
     // Name - large script
-    ctx.font = '700 54px "Dancing Script", cursive'; ctx.fillStyle = '#23335c';
-    ctx.fillText(data.studentName || 'Student Name', 561, 300);
+    ctx.font = '700 59px "Dancing Script", cursive'; ctx.fillStyle = '#23335c';
+    ctx.fillText(data.studentName || 'Student Name', 561, 258);
     // Helper text
-    ctx.font = '400 19px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 350);
+    ctx.font = '400 20px Merriweather, serif'; ctx.fillStyle = '#23335c';
+    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 302);
     // Course - gold
-    ctx.font = 'italic 28px Merriweather, serif'; ctx.fillStyle = '#bda054';
-    ctx.fillText(data.courseName || 'Course Title', 561, 400);
-    // Bottom: TUTOR left, ID/seal center, date right
-    // Tutor (name bold blue)
+    ctx.font = 'italic 29px Merriweather, serif'; ctx.fillStyle = '#bda054';
+    ctx.fillText(data.courseName || 'Course Title', 561, 348);
+    // Bottom: TUTOR left, (no ID) seal center, date right
+    // Tutor
     ctx.font = 'bold 17px Merriweather, serif'; ctx.fillStyle = '#23335c'; ctx.textAlign = 'left';
-    ctx.fillText(data.lecturerName || 'Dr. John Smith', 80, 670);
+    ctx.fillText(data.lecturerName || 'Dr. John Smith', 78, 680);
     ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad';
-    ctx.fillText('TUTOR / LECTURER', 80, 695);
+    ctx.fillText('TUTOR / LECTURER', 78, 697);
     // NCC SEAL at BOTTOM/CENTER
-    drawNCCSeal(ctx, 561, 690, 56);
-    ctx.textAlign = 'center'; ctx.font = 'normal 10px Merriweather, serif'; ctx.fillStyle = '#a2a3ad';
-       // Date (blue bold)
+    drawNCCSeal(ctx, 561, 678, 55);
+    // Date (blue bold)
     ctx.textAlign = 'right'; ctx.font = 'bold 17px Merriweather, serif'; ctx.fillStyle = '#23335c';
-    ctx.fillText(data.issueDate || '2025-11-16', 1045, 670);
-    ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad'; ctx.fillText('DATE OF ISSUE', 1045, 695);
+    ctx.fillText(data.issueDate || '2025-11-16', 1045, 680);
+    ctx.font = '800 11px Merriweather, serif'; ctx.fillStyle = '#a2a3ad'; ctx.fillText('DATE OF ISSUE', 1045, 697);
 }
 function drawNCCSeal(ctx, cx, cy, r) {
     // Gold starburst
     ctx.save();
-    ctx.translate(cx,cy);
+    ctx.translate(cx, cy);
     ctx.beginPath();
-    for(let i=0;i<18;i++){
-      let angle = (i/18)*Math.PI*2; let r1 = r*1.1, r2 = r*0.68;
+    for(let i=0; i<18; i++){
+      let angle = (i/18)*Math.PI*2; let r1 = r*1.14, r2 = r*0.68;
       ctx.lineTo(Math.cos(angle)*(i%2?r1:r2), Math.sin(angle)*(i%2?r1:r2));
     }
     ctx.closePath();
-    ctx.fillStyle='#bfa544';ctx.shadowColor='#44381e';ctx.shadowBlur=4;ctx.fill();
+    ctx.fillStyle='#bfa544';ctx.shadowColor='#44381e';ctx.shadowBlur=3;ctx.fill();
     ctx.shadowBlur=0;
     // Circle inner
     ctx.beginPath();ctx.arc(0,0,r*0.78,0,2*Math.PI);
     ctx.fillStyle='#ffe690';ctx.fill();ctx.strokeStyle='#bfa544';ctx.lineWidth=2;ctx.stroke();
-    // NCC on top, font
+    // NCC text
     ctx.font='700 32px Montserrat, Arial, sans-serif';ctx.fillStyle='#23335c';ctx.textAlign='center';ctx.fillText('NCC',0,13);
     ctx.restore();
-}
-function drawDecorativeCorners(ctx) {
-    const cornerSize = 38, offset = 14;
-    ctx.strokeStyle='#bda054'; ctx.lineWidth=1.2;
-    ctx.beginPath(); ctx.moveTo(offset+cornerSize,offset); ctx.lineTo(offset,offset); ctx.lineTo(offset,offset+cornerSize); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(1122-offset-cornerSize,offset); ctx.lineTo(1122-offset,offset); ctx.lineTo(1122-offset,offset+cornerSize); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(offset,794-offset-cornerSize); ctx.lineTo(offset,794-offset); ctx.lineTo(offset+cornerSize,794-offset); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(1122-offset,794-offset-cornerSize); ctx.lineTo(1122-offset,794-offset); ctx.lineTo(1122-offset-cornerSize,794-offset); ctx.stroke();
 }
 </script>
 </body></html>
