@@ -742,7 +742,7 @@ function drawCertificateCore(ctx, data) {
     // Draw logo
     if (logoImage && logoImage.complete) {
         try {
-            const logoMaxSize = 100;
+            const logoMaxSize = 300;
             const ratio = logoImage.width / logoImage.height;
             let w = logoMaxSize, h = logoMaxSize;
 
@@ -757,76 +757,66 @@ function drawCertificateCore(ctx, data) {
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'bold 48px Georgia, serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
+    ctx.fillText('Certificate of ' + data.certificateType, 561, 250);
 
     // Line
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(361, 240);
-    ctx.lineTo(761, 240);
+    ctx.moveTo(361, 270);
+    ctx.lineTo(761, 270);
     ctx.stroke();
 
     // Text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 20px Georgia, serif';
-    ctx.fillText('This certifies that', 561, 290);
+    ctx.fillText('This certifies that', 561, 310);
 
     // Student name
     ctx.font = 'bold 44px Georgia, serif';
-    ctx.fillText(data.studentName, 561, 350);
+    ctx.fillText(data.studentName, 561, 360);
 
     // Underline
     const nameWidth = ctx.measureText(data.studentName).width;
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(561 - nameWidth/2 - 15, 360);
-    ctx.lineTo(561 + nameWidth/2 + 15, 360);
+    ctx.moveTo(561 - nameWidth/2 - 15, 380);
+    ctx.lineTo(561 + nameWidth/2 + 15, 380);
     ctx.stroke();
 
     // Course text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
-    ctx.fillText('has successfully completed the course', 561, 400);
+    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 420);
 
     // Course name
     ctx.font = 'bold 32px Georgia, serif';
-    ctx.fillText(data.courseName, 561, 450);
+    ctx.fillText(data.courseName, 561, 470);
 
     // Course underline
     const courseWidth = ctx.measureText(data.courseName).width;
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(561 - courseWidth/2 - 15, 460);
-    ctx.lineTo(561 + courseWidth/2 + 15, 460);
+    ctx.moveTo(561 - courseWidth/2 - 15, 490);
+    ctx.lineTo(561 + courseWidth/2 + 15, 490);
     ctx.stroke();
 
     // Lecturer text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 18px Georgia, serif';
-    ctx.fillText('under the instruction of', 561, 510);
+    ctx.fillText('under the instruction of', 561, 530);
 
     // Lecturer name
     ctx.font = 'bold 26px Georgia, serif';
-    ctx.fillText(data.lecturerName, 561, 550);
+    ctx.fillText(data.lecturerName, 561, 570);
 
     // Date
     ctx.font = 'italic 16px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
-    ctx.fillText('Issued: ' + data.issueDate, 561, 650);
+    ctx.fillText('Issued: ' + data.issueDate, 561, 700);
 
-    // Signature line
-    ctx.strokeStyle = '#1a1a2e';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(411, 700);
-    ctx.lineTo(711, 700);
-    ctx.stroke();
-
-    ctx.font = '12px Georgia, serif';
-    ctx.fillText('Authorized Signature', 561, 720);
 }
 
 // ========== UTILITY ==========
