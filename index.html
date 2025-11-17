@@ -753,11 +753,13 @@ function drawCertificateCore(ctx, data) {
         } catch(e) {}
     }
 
-    // Title
-    ctx.fillStyle = '#bda054';
-    ctx.font = '700 32px Merriweather, serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Certificate of ' + data.certificateType, 561, 250);
+// Title
+ctx.fillStyle = '#bda054';
+ctx.font = '900 48px Merriweather, serif';   // increased size
+ctx.textAlign = 'center';
+
+const titleText = ('Certificate of ' + data.certificateType).toUpperCase();  
+ctx.fillText(titleText, 561, 250);           // uppercase text
 
     // Line
     ctx.strokeStyle = '#d4af37';
