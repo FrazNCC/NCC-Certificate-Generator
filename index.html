@@ -736,58 +736,45 @@ function drawHexPath(ctx, r) {
     ctx.closePath();
 }
 
-// 3D embossed NCC seal
-function drawNCCSeal(ctx, cx, cy, r) {
+function drawScholarHat(ctx, cx, cy, size) {
     ctx.save();
     ctx.translate(cx, cy);
-
-    // 1) Drop shadow (under the seal)
-    ctx.save();
-    ctx.translate(4, 4); // offset shadow
-    drawHexPath(ctx, r);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
-    ctx.fill();
-    ctx.restore();
-
-    // 2) Main hex with gold gradient
-    const grad = ctx.createLinearGradient(-r, -r, r, r);
-    grad.addColorStop(0, '#f8e7b5');  // light highlight
-    grad.addColorStop(0.5, '#d4af37'); // mid gold
-    grad.addColorStop(1, '#a67c00');   // dark edge
-
-    drawHexPath(ctx, r);
-    ctx.fillStyle = grad;
-    ctx.fill();
-
+    ctx.strokeStyle = '#d4af37';   // gold
     ctx.lineWidth = 4;
-    ctx.strokeStyle = '#8b6b10';
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+
+    const w = size;
+    const h = size * 0.35;
+
+    // ---- Top mortarboard (diamond) ----
+    ctx.beginPath();
+    ctx.moveTo(0, -h);             // top
+    ctx.lineTo(w, 0);              // right
+    ctx.lineTo(0, h);              // bottom
+    ctx.lineTo(-w, 0);             // left
+    ctx.closePath();
     ctx.stroke();
 
-    // 3) Inner bevel highlight
-    ctx.save();
-    ctx.scale(0.82, 0.82); // slightly smaller inner hex
-    const bevelGrad = ctx.createLinearGradient(-r, -r, r, r);
-    bevelGrad.addColorStop(0, 'rgba(255,255,255,0.9)');
-    bevelGrad.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.strokeStyle = bevelGrad;
-    ctx.lineWidth = 3;
-    drawHexPath(ctx, r);
+    // ---- Cap base (curved headband) ----
+    ctx.beginPath();
+    ctx.moveTo(-w * 0.7, h * 0.6);
+    ctx.quadraticCurveTo(0, h * 1.2, w * 0.7, h * 0.6);
     ctx.stroke();
-    ctx.restore();
 
-    // 4) NCC text with soft shadow (embossed feel)
-    ctx.fillStyle = '#1a1a2e';
-    ctx.font = `bold ${r * 0.9}px Georgia`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
-    ctx.shadowBlur = 6;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-    ctx.fillText('NCC', 0, 2);
+    // ---- Tassel ----
+    ctx.beginPath();
+    ctx.moveTo(w, 0);                  // attach at right corner
+    ctx.lineTo(w + size * 0.3, size * 0.5);  // drop line
+    ctx.stroke();
+
+    // Tassel circle
+    ctx.beginPath();
+    ctx.arc(w + size * 0.3, size * 0.5, size * 0.08, 0, Math.PI * 2);
+    ctx.stroke();
 
     ctx.restore();
-}
+}    
 
 function drawCertificateCore(ctx, data) {
     // Background
@@ -874,7 +861,7 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.fillStyle = '#1a1a2e'; 
     ctx.textAlign = 'right';
     ctx.font = 'italic 15px Georgia, serif'; 
-    ctx.fillText('under the instruction of', 1050, 720); 
+    ctx.fillText('Lecturer', 1050, 720); 
     
     // Lecturer name 
     ctx.textAlign = 'right';
@@ -887,8 +874,9 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.fillStyle = '#1a1a2e'; 
     ctx.fillText('Issued: ' + data.issueDate, 70, 720);
 
-    // NCC SEAL at bottom/center
-    drawNCCSeal(ctx, 561, 678, 55);
+    // Scholar hat (bottom centre)
+    drawScholarHat(ctx, 561, 690, 55);
+
 }
 
 // ========== UTILITY ==========
