@@ -493,12 +493,13 @@
     <!-- Application JavaScript -->
     <script>
 // ================================================================
-// CERTIFICATE GENERATOR APPLICATION WITH LOGO SUPPORT
+// CERTIFICATE GENERATOR - FIXED LOGO & BULK ISSUES
 // ================================================================
 
 // Global variables
 let logoImage = null;
-const LOGO_PATH = 'logo-1.png'; // Path to your logo file
+const LOGO_PATH = 'logo-1.png';
+let isGeneratingBulk = false;
 
 // State management
 const state = {
@@ -515,13 +516,13 @@ function init() {
   initializeLogo();
 }
 
-// Initialize and load logo
+// Initialize and load logo with proper aspect ratio handling
 function initializeLogo() {
   logoImage = new Image();
   logoImage.src = LOGO_PATH;
   logoImage.crossOrigin = "Anonymous";
   logoImage.onerror = function() {
-    console.warn('Logo failed to load from:', LOGO_PATH);
+    console.warn('Logo not found at:', LOGO_PATH);
   };
   logoImage.onload = function() {
     console.log('Logo loaded successfully');
@@ -530,12 +531,10 @@ function initializeLogo() {
 
 // Setup all event listeners
 function setupEventListeners() {
-  // Tab navigation
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', (e) => switchTab(e.target.dataset.tab));
   });
 
-  // Single certificate form
   document.getElementById('singleForm').addEventListener('submit', handlePreview);
   document.getElementById('generatePdfBtn').addEventListener('click', handleGeneratePdf);
   document.getElementById('closePreviewBtn').addEventListener('click', () => {
@@ -547,7 +546,6 @@ function setupEventListeners() {
     document.getElementById('previewSection').classList.add('hidden');
   });
 
-  // Bulk certificate
   document.getElementById('downloadCsvBtn').addEventListener('click', downloadSampleCsv);
   document.getElementById('csvFileInput').addEventListener('change', handleCsvUpload);
   document.getElementById('generateBulkBtn').addEventListener('click', handleGenerateBulk);
@@ -557,7 +555,6 @@ function setupEventListeners() {
     state.csvData = [];
   });
 
-  // Drag and drop for CSV
   setupDragAndDrop();
 }
 
@@ -589,27 +586,22 @@ function setupDragAndDrop() {
   });
 }
 
-// Set default date to today
 function setDefaultDate() {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('issueDate').value = today;
 }
 
-// Switch between tabs
 function switchTab(tabName) {
   state.currentTab = tabName;
 
-  // Update tab buttons
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.tab === tabName);
   });
 
-  // Update tab content
   document.getElementById('singleTab').classList.toggle('hidden', tabName !== 'single');
   document.getElementById('bulkTab').classList.toggle('hidden', tabName !== 'bulk');
 }
 
-// Handle preview for single certificate
 function handlePreview(e) {
   e.preventDefault();
 
@@ -621,7 +613,6 @@ function handlePreview(e) {
     certificateType: document.getElementById('certificateType').value
   };
 
-  // Validate form
   if (!validateFormData(formData)) {
     showToast('Please fill in all required fields', 'error');
     return;
@@ -630,45 +621,40 @@ function handlePreview(e) {
   state.currentCertificateData = formData;
   drawCertificate(formData);
 
-  // Show preview section and enable PDF button
   document.getElementById('previewSection').classList.remove('hidden');
   document.getElementById('generatePdfBtn').disabled = false;
   state.previewShown = true;
 
-  // Scroll to preview
   setTimeout(() => {
     document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
 }
 
-// Validate form data
 function validateFormData(data) {
   return Object.values(data).every(value => value && value.toString().trim() !== '');
 }
 
-// Draw certificate on canvas WITH LOGO
+// FIXED: Logo drawing with proper aspect ratio
 function drawCertificate(data) {
   const canvas = document.getElementById('certificateCanvas');
   const ctx = canvas.getContext('2d');
 
-  // Set canvas size for A4 landscape (297mm x 210mm at 96 DPI with 3x scale for quality)
   const scale = 3;
   canvas.width = 1122 * scale;
   canvas.height = 794 * scale;
 
-  // Scale context for high-res rendering
   ctx.scale(scale, scale);
 
   // Background
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, 1122, 794);
 
-  // Outer border - gold
+  // Outer border
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 12;
   ctx.strokeRect(30, 30, 1062, 734);
 
-  // Inner border - darker gold
+  // Inner border
   ctx.strokeStyle = '#b8860b';
   ctx.lineWidth = 2;
   ctx.strokeRect(45, 45, 1032, 704);
@@ -676,13 +662,26 @@ function drawCertificate(data) {
   // Decorative corners
   drawDecorativeCorners(ctx);
 
-  // Draw logo if available
-  if (logoImage && logoImage.complete) {
+  // FIXED LOGO: Maintain aspect ratio, prevent distortion
+  if (logoImage && logoImage.complete && logoImage.width > 0) {
     try {
-      const logoX = 561 - 60;  // Center logo horizontally
-      const logoY = 50;        // Position at top
-      const logoWidth = 120;
-      const logoHeight = 120;
+      const logoMaxWidth = 100;
+      const logoMaxHeight = 100;
+
+      // Calculate aspect ratio to prevent distortion
+      const aspectRatio = logoImage.width / logoImage.height;
+      let logoWidth = logoMaxWidth;
+      let logoHeight = logoMaxHeight;
+
+      if (aspectRatio > 1) {
+        logoHeight = logoMaxWidth / aspectRatio;
+      } else {
+        logoWidth = logoMaxHeight * aspectRatio;
+      }
+
+      const logoX = 561 - (logoWidth / 2);
+      const logoY = 60;
+
       ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
     } catch(e) {
       console.warn('Error drawing logo:', e);
@@ -691,25 +690,25 @@ function drawCertificate(data) {
 
   // Certificate title
   ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'bold 52px Georgia, serif';
+  ctx.font = 'bold 48px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Certificate of ' + data.certificateType, 561, 200);
+  ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
 
-  // Decorative line under title
+  // Decorative line
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(361, 220);
-  ctx.lineTo(761, 220);
+  ctx.moveTo(361, 240);
+  ctx.lineTo(761, 240);
   ctx.stroke();
 
   // "This certifies that" text
   ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'italic 24px Georgia, serif';
-  ctx.fillText('This certifies that', 561, 290);
+  ctx.font = 'italic 22px Georgia, serif';
+  ctx.fillText('This certifies that', 561, 300);
 
-  // Student name (prominent)
-  ctx.font = 'bold 48px Georgia, serif';
+  // Student name
+  ctx.font = 'bold 44px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
   ctx.fillText(data.studentName, 561, 360);
 
@@ -718,87 +717,82 @@ function drawCertificate(data) {
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - nameWidth/2 - 20, 375);
-  ctx.lineTo(561 + nameWidth/2 + 20, 375);
+  ctx.moveTo(561 - nameWidth/2 - 15, 370);
+  ctx.lineTo(561 + nameWidth/2 + 15, 370);
   ctx.stroke();
 
   // "has successfully completed" text
-  ctx.font = 'italic 22px Georgia, serif';
+  ctx.font = 'italic 20px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('has successfully completed the course', 561, 440);
+  ctx.fillText('has successfully completed the course', 561, 410);
 
   // Course name
-  ctx.font = 'bold 36px Georgia, serif';
+  ctx.font = 'bold 32px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.courseName, 561, 500);
+  ctx.fillText(data.courseName, 561, 460);
 
   // Underline for course
   const courseWidth = ctx.measureText(data.courseName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - courseWidth/2 - 20, 515);
-  ctx.lineTo(561 + courseWidth/2 + 20, 515);
+  ctx.moveTo(561 - courseWidth/2 - 15, 470);
+  ctx.lineTo(561 + courseWidth/2 + 15, 470);
   ctx.stroke();
 
   // "under the instruction of" text
-  ctx.font = 'italic 20px Georgia, serif';
+  ctx.font = 'italic 18px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('under the instruction of', 561, 575);
+  ctx.fillText('under the instruction of', 561, 520);
 
   // Lecturer name
-  ctx.font = 'bold 28px Georgia, serif';
+  ctx.font = 'bold 26px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.lecturerName, 561, 620);
+  ctx.fillText(data.lecturerName, 561, 560);
 
   // Issue date
-  ctx.font = 'italic 20px Georgia, serif';
+  ctx.font = 'italic 18px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
   const formattedDate = formatDate(data.issueDate);
-  ctx.fillText('Issued on: ' + formattedDate, 561, 680);
+  ctx.fillText('Issued on: ' + formattedDate, 561, 670);
 
   // Signature line
   ctx.strokeStyle = '#1a1a2e';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(411, 720);
-  ctx.lineTo(711, 720);
+  ctx.moveTo(411, 710);
+  ctx.lineTo(711, 710);
   ctx.stroke();
 
-  ctx.font = '16px Georgia, serif';
+  ctx.font = '14px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('Authorized Signature', 561, 740);
+  ctx.fillText('Authorized Signature', 561, 730);
 }
 
-// Draw decorative corners
 function drawDecorativeCorners(ctx) {
   const cornerSize = 40;
   const offset = 45;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 3;
 
-  // Top-left corner
   ctx.beginPath();
   ctx.moveTo(offset + cornerSize, offset);
   ctx.lineTo(offset, offset);
   ctx.lineTo(offset, offset + cornerSize);
   ctx.stroke();
 
-  // Top-right corner
   ctx.beginPath();
   ctx.moveTo(1122 - offset - cornerSize, offset);
   ctx.lineTo(1122 - offset, offset);
   ctx.lineTo(1122 - offset, offset + cornerSize);
   ctx.stroke();
 
-  // Bottom-left corner
   ctx.beginPath();
   ctx.moveTo(offset, 794 - offset - cornerSize);
   ctx.lineTo(offset, 794 - offset);
   ctx.lineTo(offset + cornerSize, 794 - offset);
   ctx.stroke();
 
-  // Bottom-right corner
   ctx.beginPath();
   ctx.moveTo(1122 - offset, 794 - offset - cornerSize);
   ctx.lineTo(1122 - offset, 794 - offset);
@@ -806,14 +800,12 @@ function drawDecorativeCorners(ctx) {
   ctx.stroke();
 }
 
-// Format date
 function formatDate(dateString) {
   const date = new Date(dateString + 'T00:00:00');
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 
-// Generate PDF for single certificate
 function handleGeneratePdf() {
   if (!state.currentCertificateData) {
     showToast('Please preview the certificate first', 'error');
@@ -824,7 +816,6 @@ function handleGeneratePdf() {
   showToast('Certificate generated successfully!', 'success');
 }
 
-// Generate PDF from certificate data
 function generatePdfFromData(data) {
   const canvas = document.getElementById('certificateCanvas');
   const imgData = canvas.toDataURL('image/png', 1.0);
@@ -836,24 +827,20 @@ function generatePdfFromData(data) {
     format: 'a4'
   });
 
-  // Add image to PDF
   pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
 
-  // Create filename
   const filename = sanitizeFilename(data.courseName + '_' + data.studentName + '.pdf');
   pdf.save(filename);
 }
 
-// Sanitize filename
 function sanitizeFilename(filename) {
   return filename
-    .replace(/[^a-z0-9_\-\.]/gi, '_')
+    .replace(/[^a-z0-9_-]/gi, '_')
     .replace(/_+/g, '_')
     .replace(/^_|_$/g, '')
     .toLowerCase();
 }
 
-// Download sample CSV
 function downloadSampleCsv() {
   const csvContent = [
     ['Student Name', 'Course Name', 'Lecturer Name', 'Issue Date', 'Certificate Type'],
@@ -875,7 +862,6 @@ function downloadSampleCsv() {
   showToast('Sample CSV downloaded', 'success');
 }
 
-// Handle CSV upload
 function handleCsvUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -886,7 +872,6 @@ function handleCsvUpload(e) {
     complete: function(results) {
       if (results.errors.length > 0) {
         showToast('Error parsing CSV file', 'error');
-        console.error(results.errors);
         return;
       }
 
@@ -895,17 +880,15 @@ function handleCsvUpload(e) {
         return;
       }
 
-      // Validate CSV structure
       const requiredColumns = ['Student Name', 'Course Name', 'Lecturer Name', 'Issue Date', 'Certificate Type'];
       const headers = Object.keys(results.data[0] || {});
       const missingColumns = requiredColumns.filter(col => !headers.includes(col));
 
       if (missingColumns.length > 0) {
-        showToast('Missing required columns: ' + missingColumns.join(', '), 'error');
+        showToast('Missing columns: ' + missingColumns.join(', '), 'error');
         return;
       }
 
-      // Validate data
       const validData = results.data.filter(row => {
         return row['Student Name'] && row['Course Name'] && 
                row['Lecturer Name'] && row['Issue Date'] && 
@@ -928,7 +911,6 @@ function handleCsvUpload(e) {
   });
 }
 
-// Display CSV preview
 function displayCsvPreview(data) {
   const tbody = document.getElementById('csvPreviewBody');
   tbody.innerHTML = '';
@@ -948,17 +930,21 @@ function displayCsvPreview(data) {
   document.getElementById('csvPreviewContainer').classList.remove('hidden');
 }
 
-// Escape HTML to prevent XSS
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
 }
 
-// Generate bulk certificates
+// FIXED: Bulk certificate generation with proper error handling
 async function handleGenerateBulk() {
   if (state.csvData.length === 0) {
     showToast('Please upload a CSV file first', 'error');
+    return;
+  }
+
+  if (isGeneratingBulk) {
+    showToast('Generation already in progress', 'info');
     return;
   }
 
@@ -966,6 +952,7 @@ async function handleGenerateBulk() {
   const originalText = btn.innerHTML;
   btn.innerHTML = 'Generating...';
   btn.disabled = true;
+  isGeneratingBulk = true;
 
   document.getElementById('progressContainer').style.display = 'block';
 
@@ -973,47 +960,72 @@ async function handleGenerateBulk() {
     const zip = new JSZip();
     const { jsPDF } = window.jspdf;
     const totalCerts = state.csvData.length;
+    let successCount = 0;
 
     for (let i = 0; i < totalCerts; i++) {
-      const row = state.csvData[i];
-      const certData = {
-        studentName: row['Student Name'],
-        courseName: row['Course Name'],
-        lecturerName: row['Lecturer Name'],
-        issueDate: row['Issue Date'],
-        certificateType: row['Certificate Type']
-      };
+      try {
+        const row = state.csvData[i];
 
-      // Create temporary canvas for this certificate
-      const tempCanvas = document.createElement('canvas');
-      const scale = 3;
-      tempCanvas.width = 1122 * scale;
-      tempCanvas.height = 794 * scale;
-      const ctx = tempCanvas.getContext('2d');
-      ctx.scale(scale, scale);
+        const certData = {
+          studentName: String(row['Student Name']).trim(),
+          courseName: String(row['Course Name']).trim(),
+          lecturerName: String(row['Lecturer Name']).trim(),
+          issueDate: String(row['Issue Date']).trim(),
+          certificateType: String(row['Certificate Type']).trim()
+        };
 
-      // Draw certificate on temporary canvas
-      drawCertificateOnCanvas(ctx, certData);
+        // Validate each row
+        if (!certData.studentName || !certData.courseName || !certData.lecturerName || !certData.issueDate || !certData.certificateType) {
+          console.warn('Row ' + (i+1) + ' has missing data, skipping');
+          continue;
+        }
 
-      // Convert to PDF
-      const imgData = tempCanvas.toDataURL('image/png', 1.0);
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: 'a4'
-      });
-      pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+        // Create temporary canvas
+        const tempCanvas = document.createElement('canvas');
+        const scale = 3;
+        tempCanvas.width = 1122 * scale;
+        tempCanvas.height = 794 * scale;
+        const ctx = tempCanvas.getContext('2d');
+        ctx.scale(scale, scale);
 
-      // Add to ZIP
-      const filename = sanitizeFilename(certData.courseName + '_' + certData.studentName + '.pdf');
-      const pdfBlob = pdf.output('blob');
-      zip.file(filename, pdfBlob);
+        // Draw certificate on temporary canvas
+        drawCertificateOnCanvas(ctx, certData);
 
-      // Update progress
-      const progress = Math.round(((i + 1) / totalCerts) * 100);
-      document.getElementById('progressFill').style.width = progress + '%';
-      document.getElementById('progressFill').textContent = progress + '%';
-      document.getElementById('progressText').textContent = 'Generating certificate ' + (i + 1) + ' of ' + totalCerts + '...';
+        // Convert to PDF
+        const imgData = tempCanvas.toDataURL('image/png', 1.0);
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4'
+        });
+        pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+
+        // Add to ZIP
+        const filename = sanitizeFilename(certData.courseName + '_' + certData.studentName + '.pdf');
+        const pdfBlob = pdf.output('blob');
+        zip.file(filename, pdfBlob);
+
+        successCount++;
+
+        // Update progress
+        const progress = Math.round(((i + 1) / totalCerts) * 100);
+        document.getElementById('progressFill').style.width = progress + '%';
+        document.getElementById('progressFill').textContent = progress + '%';
+        document.getElementById('progressText').textContent = 'Generated ' + successCount + ' of ' + totalCerts + ' certificates';
+
+        // Small delay to prevent browser freezing
+        if (i % 5 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+      } catch(certError) {
+        console.error('Error generating certificate ' + (i+1) + ':', certError);
+      }
+    }
+
+    if (successCount === 0) {
+      showToast('No certificates were generated', 'error');
+      return;
     }
 
     // Generate ZIP and download
@@ -1023,13 +1035,14 @@ async function handleGenerateBulk() {
     link.download = 'certificates.zip';
     link.click();
 
-    showToast('Successfully generated ' + totalCerts + ' certificates!', 'success');
+    showToast('Successfully generated ' + successCount + ' of ' + totalCerts + ' certificates!', 'success');
   } catch (error) {
-    showToast('Error generating certificates', 'error');
-    console.error(error);
+    showToast('Error generating certificates: ' + error.message, 'error');
+    console.error('Bulk generation error:', error);
   } finally {
     btn.innerHTML = originalText;
     btn.disabled = false;
+    isGeneratingBulk = false;
     document.getElementById('progressContainer').style.display = 'none';
   }
 }
@@ -1040,12 +1053,12 @@ function drawCertificateOnCanvas(ctx, data) {
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, 1122, 794);
 
-  // Outer border - gold
+  // Outer border
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 12;
   ctx.strokeRect(30, 30, 1062, 734);
 
-  // Inner border - darker gold
+  // Inner border
   ctx.strokeStyle = '#b8860b';
   ctx.lineWidth = 2;
   ctx.strokeRect(45, 45, 1032, 704);
@@ -1053,13 +1066,25 @@ function drawCertificateOnCanvas(ctx, data) {
   // Decorative corners
   drawDecorativeCorners(ctx);
 
-  // Draw logo if available
-  if (logoImage && logoImage.complete) {
+  // FIXED LOGO: Same aspect ratio handling as preview
+  if (logoImage && logoImage.complete && logoImage.width > 0) {
     try {
-      const logoX = 561 - 60;
-      const logoY = 50;
-      const logoWidth = 120;
-      const logoHeight = 120;
+      const logoMaxWidth = 100;
+      const logoMaxHeight = 100;
+
+      const aspectRatio = logoImage.width / logoImage.height;
+      let logoWidth = logoMaxWidth;
+      let logoHeight = logoMaxHeight;
+
+      if (aspectRatio > 1) {
+        logoHeight = logoMaxWidth / aspectRatio;
+      } else {
+        logoWidth = logoMaxHeight * aspectRatio;
+      }
+
+      const logoX = 561 - (logoWidth / 2);
+      const logoY = 60;
+
       ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
     } catch(e) {
       console.warn('Error drawing logo:', e);
@@ -1068,86 +1093,76 @@ function drawCertificateOnCanvas(ctx, data) {
 
   // Certificate title
   ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'bold 52px Georgia, serif';
+  ctx.font = 'bold 48px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Certificate of ' + data.certificateType, 561, 200);
+  ctx.fillText('Certificate of ' + data.certificateType, 561, 220);
 
-  // Decorative line under title
+  // Decorative line
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(361, 220);
-  ctx.lineTo(761, 220);
+  ctx.moveTo(361, 240);
+  ctx.lineTo(761, 240);
   ctx.stroke();
 
-  // "This certifies that" text
+  // Rest of certificate content
   ctx.fillStyle = '#1a1a2e';
-  ctx.font = 'italic 24px Georgia, serif';
-  ctx.fillText('This certifies that', 561, 290);
+  ctx.font = 'italic 22px Georgia, serif';
+  ctx.fillText('This certifies that', 561, 300);
 
-  // Student name (prominent)
-  ctx.font = 'bold 48px Georgia, serif';
+  ctx.font = 'bold 44px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
   ctx.fillText(data.studentName, 561, 360);
 
-  // Underline for name
   const nameWidth = ctx.measureText(data.studentName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - nameWidth/2 - 20, 375);
-  ctx.lineTo(561 + nameWidth/2 + 20, 375);
+  ctx.moveTo(561 - nameWidth/2 - 15, 370);
+  ctx.lineTo(561 + nameWidth/2 + 15, 370);
   ctx.stroke();
 
-  // "has successfully completed" text
-  ctx.font = 'italic 22px Georgia, serif';
+  ctx.font = 'italic 20px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('has successfully completed the course', 561, 440);
+  ctx.fillText('has successfully completed the course', 561, 410);
 
-  // Course name
-  ctx.font = 'bold 36px Georgia, serif';
+  ctx.font = 'bold 32px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.courseName, 561, 500);
+  ctx.fillText(data.courseName, 561, 460);
 
-  // Underline for course
   const courseWidth = ctx.measureText(data.courseName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - courseWidth/2 - 20, 515);
-  ctx.lineTo(561 + courseWidth/2 + 20, 515);
+  ctx.moveTo(561 - courseWidth/2 - 15, 470);
+  ctx.lineTo(561 + courseWidth/2 + 15, 470);
   ctx.stroke();
 
-  // "under the instruction of" text
-  ctx.font = 'italic 20px Georgia, serif';
+  ctx.font = 'italic 18px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('under the instruction of', 561, 575);
+  ctx.fillText('under the instruction of', 561, 520);
 
-  // Lecturer name
-  ctx.font = 'bold 28px Georgia, serif';
+  ctx.font = 'bold 26px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.lecturerName, 561, 620);
+  ctx.fillText(data.lecturerName, 561, 560);
 
-  // Issue date
-  ctx.font = 'italic 20px Georgia, serif';
+  ctx.font = 'italic 18px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
   const formattedDate = formatDate(data.issueDate);
-  ctx.fillText('Issued on: ' + formattedDate, 561, 680);
+  ctx.fillText('Issued on: ' + formattedDate, 561, 670);
 
-  // Signature line
   ctx.strokeStyle = '#1a1a2e';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(411, 720);
-  ctx.lineTo(711, 720);
+  ctx.moveTo(411, 710);
+  ctx.lineTo(711, 710);
   ctx.stroke();
 
-  ctx.font = '16px Georgia, serif';
+  ctx.font = '14px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('Authorized Signature', 561, 740);
+  ctx.fillText('Authorized Signature', 561, 730);
 }
 
-// Show toast notification
 function showToast(message, type) {
   if (!type) type = 'info';
 
@@ -1166,7 +1181,6 @@ function showToast(message, type) {
   }, 3000);
 }
 
-// Initialize app when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
