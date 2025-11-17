@@ -736,41 +736,46 @@ function drawHexPath(ctx, r) {
     ctx.closePath();
 }
 
-function drawScroll(ctx, cx, cy, size) {
+function drawScholarHat(ctx, cx, cy, size) {
     ctx.save();
     ctx.translate(cx, cy);
     ctx.strokeStyle = '#d4af37';   // gold
     ctx.lineWidth = 4;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
 
-    const w = size * 2;     // width of scroll
-    const h = size * 0.6;   // height
+    const w = size;
+    const h = size * 0.35;
 
-    // ---- Main rectangle ----
+    // ---- Top mortarboard (diamond) ----
     ctx.beginPath();
-    ctx.rect(-w/2, -h/2, w, h);
+    ctx.moveTo(0, -h);             // top
+    ctx.lineTo(w, 0);              // right
+    ctx.lineTo(0, h);              // bottom
+    ctx.lineTo(-w, 0);             // left
+    ctx.closePath();
     ctx.stroke();
 
-    // ---- Rolled left side (simple circle) ----
+    // ---- Cap base (curved headband) ----
     ctx.beginPath();
-    ctx.arc(-w/2, 0, h/2, Math.PI/2, Math.PI*3/2);
+    ctx.moveTo(-w * 0.7, h * 0.6);
+    ctx.quadraticCurveTo(0, h * 1.2, w * 0.7, h * 0.6);
     ctx.stroke();
 
-    // ---- Ribbon (simple V-shape) ----
+    // ---- Tassel ----
     ctx.beginPath();
-    ctx.moveTo(0, -h/2);
-    ctx.lineTo(0, h/2);
+    ctx.moveTo(w, 0);                       // attach at right corner
+    ctx.lineTo(w + size * 0.3, size * 0.5); // drop line
     ctx.stroke();
 
+    // Tassel circle
     ctx.beginPath();
-    ctx.moveTo(0, h/2);
-    ctx.lineTo(size * 0.3, h/2 + size * 0.4);
-    ctx.lineTo(-size * 0.3, h/2);
+    ctx.arc(w + size * 0.3, size * 0.5, size * 0.08, 0, Math.PI * 2);
     ctx.stroke();
 
     ctx.restore();
 }
+
 
 function drawCertificateCore(ctx, data) {
     // Background
@@ -873,8 +878,6 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     // Hat with scroll under it
     drawScholarHat(ctx, 561, 650, 55);
     drawScroll(ctx, 561, 720, 35);
-
-
 }
 
 // ========== UTILITY ==========
