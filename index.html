@@ -736,45 +736,70 @@ function drawHexPath(ctx, r) {
     ctx.closePath();
 }
 
-function drawScholarHat(ctx, cx, cy, size) {
+function drawScroll(ctx, cx, cy, size) {
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.strokeStyle = '#d4af37';   // gold
+    ctx.strokeStyle = '#d4af37';   // gold (same as hat)
     ctx.lineWidth = 4;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
 
-    const w = size;
-    const h = size * 0.35;
+    const w = size * 2;      // overall width of scroll
+    const h = size * 0.6;    // height of scroll
+    const r = h * 0.45;      // radius for rolled end
 
-    // ---- Top mortarboard (diamond) ----
+    // ---- Main scroll body (rectangle) ----
     ctx.beginPath();
-    ctx.moveTo(0, -h);             // top
-    ctx.lineTo(w, 0);              // right
-    ctx.lineTo(0, h);              // bottom
-    ctx.lineTo(-w, 0);             // left
+    ctx.moveTo(-w / 2, -h / 2);
+    ctx.lineTo(w / 2, -h / 2);
+    ctx.lineTo(w / 2,  h / 2);
+    ctx.lineTo(-w / 2,  h / 2);
     ctx.closePath();
     ctx.stroke();
 
-    // ---- Cap base (curved headband) ----
+    // ---- Rolled left end (spiral) ----
+    const rollCenterX = -w / 2;
+    const rollCenterY = 0;
+
+    // Outer arc
     ctx.beginPath();
-    ctx.moveTo(-w * 0.7, h * 0.6);
-    ctx.quadraticCurveTo(0, h * 1.2, w * 0.7, h * 0.6);
+    ctx.arc(rollCenterX, rollCenterY, r, Math.PI / 2, Math.PI * 3/2, true);
     ctx.stroke();
 
-    // ---- Tassel ----
+    // Inner arc
     ctx.beginPath();
-    ctx.moveTo(w, 0);                  // attach at right corner
-    ctx.lineTo(w + size * 0.3, size * 0.5);  // drop line
+    ctx.arc(rollCenterX, rollCenterY, r * 0.55, Math.PI / 2, Math.PI * 3/2, true);
     ctx.stroke();
 
-    // Tassel circle
+    // ---- Ribbon band in the middle ----
+    const bandWidth = size * 0.3;
     ctx.beginPath();
-    ctx.arc(w + size * 0.3, size * 0.5, size * 0.08, 0, Math.PI * 2);
+    ctx.moveTo(-bandWidth / 2, -h / 2);
+    ctx.lineTo(-bandWidth / 2,  h / 2);
+    ctx.moveTo(bandWidth / 2,  -h / 2);
+    ctx.lineTo(bandWidth / 2,   h / 2);
+    ctx.stroke();
+
+    // ---- Ribbon tails ----
+    const tailLen = size * 0.4;
+
+    // Left tail
+    ctx.beginPath();
+    ctx.moveTo(-bandWidth / 2, h / 2);
+    ctx.lineTo(-bandWidth / 2 - tailLen * 0.4, h / 2 + tailLen);
+    ctx.lineTo(-bandWidth / 2 + tailLen * 0.2, h / 2);
+    ctx.stroke();
+
+    // Right tail
+    ctx.beginPath();
+    ctx.moveTo(bandWidth / 2, h / 2);
+    ctx.lineTo(bandWidth / 2 + tailLen * 0.4, h / 2 + tailLen);
+    ctx.lineTo(bandWidth / 2 - tailLen * 0.2, h / 2);
     ctx.stroke();
 
     ctx.restore();
-}    
+}
+
 
 function drawCertificateCore(ctx, data) {
     // Background
@@ -874,8 +899,11 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.fillStyle = '#1a1a2e'; 
     ctx.fillText('Issued: ' + data.issueDate, 70, 720);
 
-    // Scholar hat (bottom centre)
-    drawScholarHat(ctx, 561, 690, 55);
+    // Hat
+    drawScholarHat(ctx, 561, 650, 55);
+
+    // Scroll just under it
+    drawScroll(ctx, 561, 730, 35);
 
 }
 
