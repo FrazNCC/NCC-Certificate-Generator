@@ -450,6 +450,8 @@
 
 let logoImage = null;
 let csvDataArray = [];
+let gradIcon = null;
+
 
 // Load logo
 function loadLogo() {
@@ -457,10 +459,17 @@ function loadLogo() {
     logoImage.src = 'logo-1.png';
     logoImage.crossOrigin = "Anonymous";
 }
+// Load graduation icon
+function loadGradIcon() {
+    gradIcon = new Image();
+    gradIcon.src = 'grad-icon.png';   // make sure filename matches your image
+    gradIcon.crossOrigin = "Anonymous";
+}
 
 // Initialize
 window.addEventListener('DOMContentLoaded', function() {
     loadLogo();
+    loadGradIcon();     // ✅ add this line
     setDefaultDate();
     setupEventListeners();
 });
@@ -736,77 +745,6 @@ function drawHexPath(ctx, r) {
     ctx.closePath();
 }
 
-function drawScholarHat(ctx, cx, cy, size) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.strokeStyle = '#d4af37';   // gold
-    ctx.lineWidth = 4;
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-
-    const w = size;
-    const h = size * 0.35;
-
-    // ---- Top mortarboard (diamond) ----
-    ctx.beginPath();
-    ctx.moveTo(0, -h);             // top
-    ctx.lineTo(w, 0);              // right
-    ctx.lineTo(0, h);              // bottom
-    ctx.lineTo(-w, 0);             // left
-    ctx.closePath();
-    ctx.stroke();
-
-    // ---- Cap base (curved headband) ----
-    ctx.beginPath();
-    ctx.moveTo(-w * 0.7, h * 0.6);
-    ctx.quadraticCurveTo(0, h * 1.2, w * 0.7, h * 0.6);
-    ctx.stroke();
-
-    // ---- Tassel ----
-    ctx.beginPath();
-    ctx.moveTo(w, 0);                       // attach at right corner
-    ctx.lineTo(w + size * 0.3, size * 0.5); // drop line
-    ctx.stroke();
-
-    // Tassel circle
-    ctx.beginPath();
-    ctx.arc(w + size * 0.3, size * 0.5, size * 0.08, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.restore();
-}
-    function drawScroll(ctx, cx, cy, size) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.strokeStyle = '#d4af37';   // gold
-    ctx.lineWidth = 4;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-
-    const w = size * 2;     // width
-    const h = size * 0.6;   // height
-
-    // Main rectangle
-    ctx.beginPath();
-    ctx.rect(-w / 2, -h / 2, w, h);
-    ctx.stroke();
-
-    // Rolled left side (simple half-circle)
-    ctx.beginPath();
-    ctx.arc(-w / 2, 0, h / 2, Math.PI / 2, Math.PI * 3/2);
-    ctx.stroke();
-
-    // Simple ribbon in middle
-    ctx.beginPath();
-    ctx.moveTo(0, -h / 2);
-    ctx.lineTo(0, h / 2);
-    ctx.stroke();
-
-    ctx.restore();
-
-}
-
-
 function drawCertificateCore(ctx, data) {
     // Background
     ctx.fillStyle = '#ffffff';
@@ -905,9 +843,15 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.fillStyle = '#1a1a2e'; 
     ctx.fillText('Issued: ' + data.issueDate, 70, 720);
 
-    // Hat with scroll under it
-    drawScholarHat(ctx, 561, 650, 55);
-    drawScroll(ctx, 561, 720, 35);
+    // Graduation icon (bottom centre)
+    if (gradIcon && gradIcon.complete) {
+        const iconW = 180;   // width of the icon in pixels on the canvas
+        const iconH = 180;   // height of the icon in pixels
+        // Centered horizontally at x = 561, placed around y = 620 (adjust if needed)
+        ctx.drawImage(gradIcon, 561 - iconW / 2, 600, iconW, iconH);
+    }
+
+
 }
 
 // ========== UTILITY ==========
