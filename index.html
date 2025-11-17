@@ -771,7 +771,7 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
 
     // Text
     ctx.fillStyle = '#23335c';
-    ctx.font = '400 20px Merriweather, serif';
+    ctx.font = '400 40px Merriweather, serif';
     ctx.fillText('This certificate is proudly presented to', 561, 330);
 
     // Student name
@@ -789,33 +789,33 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
 
     // Course text
     ctx.fillStyle = '#23335c';
-    ctx.font = '400 20px Merriweather, serif';
-    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 450);
+    ctx.font = '400 40px Merriweather, serif';
+    ctx.fillText('for successfully demonstrating proficiency and completing all the requirements of the course', 561, 470);
 
     // Course name
     ctx.font = 'bold 32px Georgia, serif';
-    ctx.fillText(data.courseName, 561, 490);
+    ctx.fillText(data.courseName, 561, 500);
 
     // Course underline
     const courseWidth = ctx.measureText(data.courseName).width;
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(561 - courseWidth/2 - 15, 510);
-    ctx.lineTo(561 + courseWidth/2 + 15, 510);
+    ctx.moveTo(561 - courseWidth/2 - 15, 520);
+    ctx.lineTo(561 + courseWidth/2 + 15, 520);
     ctx.stroke();
 
     // Lecturer text
     ctx.fillStyle = '#1a1a2e';
-    ctx.font = 'italic 18px Georgia, serif';
-    ctx.fillText('under the instruction of', 561, 550);
+    ctx.font = 'italic 40px Georgia, serif';
+    ctx.fillText('under the instruction of', 561, 570);
 
     // Lecturer name
     ctx.font = 'bold 26px Georgia, serif';
-    ctx.fillText(data.lecturerName, 561, 580);
+    ctx.fillText(data.lecturerName, 561, 590);
 
     // Date
-    ctx.font = 'italic 16px Georgia, serif';
+    ctx.font = 'italic 40px Georgia, serif';
     ctx.fillStyle = '#1a1a2e';
     ctx.fillText('Issued: ' + data.issueDate, 561, 700);
 
