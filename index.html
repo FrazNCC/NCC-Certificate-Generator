@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -30,7 +30,7 @@
         .header {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
         }
 
@@ -38,6 +38,7 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .header p {
@@ -72,6 +73,7 @@
             background: white;
             color: #667eea;
             border-bottom: 3px solid #667eea;
+            margin-bottom: -2px;
         }
 
         .tab-content {
@@ -102,6 +104,7 @@
             border-radius: 8px;
             font-size: 1em;
             transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .form-group input:focus,
@@ -120,6 +123,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-right: 10px;
+            margin-bottom: 10px;
         }
 
         .btn-primary {
@@ -150,6 +154,15 @@
             background: #218838;
         }
 
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -175,6 +188,7 @@
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin: 20px 0;
+            background: white;
         }
 
         .file-upload {
@@ -298,6 +312,23 @@
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
 
         @media (max-width: 768px) {
@@ -318,14 +349,29 @@
                 margin-right: 0;
                 margin-bottom: 10px;
             }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .csv-preview table {
+                font-size: 0.9em;
+            }
+
+            .csv-preview th,
+            .csv-preview td {
+                padding: 8px;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="toastContainer"></div>
+
     <div class="container">
         <div class="header">
             <h1>🎓 Certificate Generator</h1>
-            <p>Create professional certificates instantly - Single or Bulk mode</p>
+            <p>Professional Certificate Generation - Single or Bulk Mode</p>
         </div>
 
         <div class="nav-tabs">
@@ -335,7 +381,11 @@
 
         <!-- Single Certificate Tab -->
         <div id="singleTab" class="tab-content">
-            <h2 style="margin-bottom: 30px; color: #333;">Generate Single Certificate</h2>
+            <h2 style="margin-bottom: 20px; color: #333;">Generate Single Certificate</h2>
+
+            <div class="info-box">
+                ℹ️ Fill in the details below and preview your certificate before generating the PDF.
+            </div>
 
             <form id="singleForm">
                 <div class="form-group">
@@ -369,6 +419,7 @@
 
                 <div class="button-group">
                     <button type="submit" class="btn btn-primary">Preview Certificate</button>
+                    <button type="button" id="clearFormBtn" class="btn btn-secondary">Clear</button>
                 </div>
             </form>
 
@@ -376,14 +427,19 @@
                 <h3>Certificate Preview</h3>
                 <canvas id="certificateCanvas"></canvas>
                 <div class="button-group">
-                    <button id="generatePdfBtn" class="btn btn-success" disabled>Generate PDF</button>
+                    <button id="generatePdfBtn" class="btn btn-success">Generate PDF</button>
+                    <button type="button" id="closePreviewBtn" class="btn btn-secondary">Close Preview</button>
                 </div>
             </div>
         </div>
 
         <!-- Bulk Certificate Tab -->
         <div id="bulkTab" class="tab-content hidden">
-            <h2 style="margin-bottom: 30px; color: #333;">Generate Bulk Certificates</h2>
+            <h2 style="margin-bottom: 20px; color: #333;">Generate Bulk Certificates</h2>
+
+            <div class="info-box">
+                ℹ️ Upload a CSV file with multiple students to generate certificates in bulk. Download the sample template to get started.
+            </div>
 
             <div style="margin-bottom: 30px;">
                 <button id="downloadCsvBtn" class="btn btn-secondary">📥 Download Sample CSV Template</button>
@@ -392,7 +448,7 @@
             <div class="file-upload" onclick="document.getElementById('csvFileInput').click()">
                 <input type="file" id="csvFileInput" accept=".csv">
                 <div class="file-upload-label">
-                    <p style="font-size: 3em; margin-bottom: 10px;">📄</p>
+                    <p style="font-size: 3em; margin-bottom: 10px;">📁</p>
                     <p>Click to upload CSV file or drag and drop</p>
                     <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">CSV must contain: Student Name, Course Name, Lecturer Name, Issue Date, Certificate Type</p>
                 </div>
@@ -414,7 +470,8 @@
                     <tbody id="csvPreviewBody"></tbody>
                 </table>
                 <div class="button-group">
-                    <button id="generateBulkBtn" class="btn btn-success">Generate All Certificates (ZIP)</button>
+                    <button id="generateBulkBtn" class="btn btn-success">🎯 Generate All Certificates (ZIP)</button>
+                    <button type="button" id="clearCsvBtn" class="btn btn-secondary">Clear</button>
                 </div>
             </div>
 
@@ -435,7 +492,13 @@
 
     <!-- Application JavaScript -->
     <script>
-// Certificate Generator Application
+// ================================================================
+// CERTIFICATE GENERATOR APPLICATION WITH LOGO SUPPORT
+// ================================================================
+
+// Global variables
+let logoImage = null;
+const LOGO_PATH = 'logo-1.png'; // Path to your logo file
 
 // State management
 const state = {
@@ -449,6 +512,20 @@ const state = {
 function init() {
   setupEventListeners();
   setDefaultDate();
+  initializeLogo();
+}
+
+// Initialize and load logo
+function initializeLogo() {
+  logoImage = new Image();
+  logoImage.src = LOGO_PATH;
+  logoImage.crossOrigin = "Anonymous";
+  logoImage.onerror = function() {
+    console.warn('Logo failed to load from:', LOGO_PATH);
+  };
+  logoImage.onload = function() {
+    console.log('Logo loaded successfully');
+  };
 }
 
 // Setup all event listeners
@@ -461,11 +538,55 @@ function setupEventListeners() {
   // Single certificate form
   document.getElementById('singleForm').addEventListener('submit', handlePreview);
   document.getElementById('generatePdfBtn').addEventListener('click', handleGeneratePdf);
+  document.getElementById('closePreviewBtn').addEventListener('click', () => {
+    document.getElementById('previewSection').classList.add('hidden');
+  });
+  document.getElementById('clearFormBtn').addEventListener('click', () => {
+    document.getElementById('singleForm').reset();
+    setDefaultDate();
+    document.getElementById('previewSection').classList.add('hidden');
+  });
 
   // Bulk certificate
   document.getElementById('downloadCsvBtn').addEventListener('click', downloadSampleCsv);
   document.getElementById('csvFileInput').addEventListener('change', handleCsvUpload);
   document.getElementById('generateBulkBtn').addEventListener('click', handleGenerateBulk);
+  document.getElementById('clearCsvBtn').addEventListener('click', () => {
+    document.getElementById('csvFileInput').value = '';
+    document.getElementById('csvPreviewContainer').classList.add('hidden');
+    state.csvData = [];
+  });
+
+  // Drag and drop for CSV
+  setupDragAndDrop();
+}
+
+// Setup drag and drop for CSV
+function setupDragAndDrop() {
+  const fileUpload = document.querySelector('.file-upload');
+
+  fileUpload.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUpload.style.background = '#e9ecef';
+    fileUpload.style.borderColor = '#764ba2';
+  });
+
+  fileUpload.addEventListener('dragleave', () => {
+    fileUpload.style.background = '#f8f9fa';
+    fileUpload.style.borderColor = '#667eea';
+  });
+
+  fileUpload.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUpload.style.background = '#f8f9fa';
+    fileUpload.style.borderColor = '#667eea';
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      document.getElementById('csvFileInput').files = files;
+      handleCsvUpload({ target: { files: files } });
+    }
+  });
 }
 
 // Set default date to today
@@ -477,7 +598,7 @@ function setDefaultDate() {
 // Switch between tabs
 function switchTab(tabName) {
   state.currentTab = tabName;
-  
+
   // Update tab buttons
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.tab === tabName);
@@ -491,11 +612,11 @@ function switchTab(tabName) {
 // Handle preview for single certificate
 function handlePreview(e) {
   e.preventDefault();
-  
+
   const formData = {
-    studentName: document.getElementById('studentName').value,
-    courseName: document.getElementById('courseName').value,
-    lecturerName: document.getElementById('lecturerName').value,
+    studentName: document.getElementById('studentName').value.trim(),
+    courseName: document.getElementById('courseName').value.trim(),
+    lecturerName: document.getElementById('lecturerName').value.trim(),
     issueDate: document.getElementById('issueDate').value,
     certificateType: document.getElementById('certificateType').value
   };
@@ -508,7 +629,7 @@ function handlePreview(e) {
 
   state.currentCertificateData = formData;
   drawCertificate(formData);
-  
+
   // Show preview section and enable PDF button
   document.getElementById('previewSection').classList.remove('hidden');
   document.getElementById('generatePdfBtn').disabled = false;
@@ -522,22 +643,22 @@ function handlePreview(e) {
 
 // Validate form data
 function validateFormData(data) {
-  return Object.values(data).every(value => value && value.trim() !== '');
+  return Object.values(data).every(value => value && value.toString().trim() !== '');
 }
 
-// Draw certificate on canvas
+// Draw certificate on canvas WITH LOGO
 function drawCertificate(data) {
   const canvas = document.getElementById('certificateCanvas');
   const ctx = canvas.getContext('2d');
-  
-  // Set canvas size for A4 landscape (297mm x 210mm at 96 DPI)
-  const scale = 3; // Higher resolution for better quality
+
+  // Set canvas size for A4 landscape (297mm x 210mm at 96 DPI with 3x scale for quality)
+  const scale = 3;
   canvas.width = 1122 * scale;
   canvas.height = 794 * scale;
-  
+
   // Scale context for high-res rendering
   ctx.scale(scale, scale);
-  
+
   // Background
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, 1122, 794);
@@ -555,73 +676,86 @@ function drawCertificate(data) {
   // Decorative corners
   drawDecorativeCorners(ctx);
 
+  // Draw logo if available
+  if (logoImage && logoImage.complete) {
+    try {
+      const logoX = 561 - 60;  // Center logo horizontally
+      const logoY = 50;        // Position at top
+      const logoWidth = 120;
+      const logoHeight = 120;
+      ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
+    } catch(e) {
+      console.warn('Error drawing logo:', e);
+    }
+  }
+
   // Certificate title
   ctx.fillStyle = '#1a1a2e';
   ctx.font = 'bold 52px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Certificate of ${data.certificateType}`, 561, 140);
+  ctx.fillText('Certificate of ' + data.certificateType, 561, 200);
 
   // Decorative line under title
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(361, 160);
-  ctx.lineTo(761, 160);
+  ctx.moveTo(361, 220);
+  ctx.lineTo(761, 220);
   ctx.stroke();
 
   // "This certifies that" text
   ctx.fillStyle = '#1a1a2e';
   ctx.font = 'italic 24px Georgia, serif';
-  ctx.fillText('This certifies that', 561, 240);
+  ctx.fillText('This certifies that', 561, 290);
 
   // Student name (prominent)
   ctx.font = 'bold 48px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.studentName, 561, 310);
+  ctx.fillText(data.studentName, 561, 360);
 
   // Underline for name
   const nameWidth = ctx.measureText(data.studentName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - nameWidth/2 - 20, 325);
-  ctx.lineTo(561 + nameWidth/2 + 20, 325);
+  ctx.moveTo(561 - nameWidth/2 - 20, 375);
+  ctx.lineTo(561 + nameWidth/2 + 20, 375);
   ctx.stroke();
 
   // "has successfully completed" text
   ctx.font = 'italic 22px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('has successfully completed the course', 561, 390);
+  ctx.fillText('has successfully completed the course', 561, 440);
 
   // Course name
   ctx.font = 'bold 36px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.courseName, 561, 450);
+  ctx.fillText(data.courseName, 561, 500);
 
   // Underline for course
   const courseWidth = ctx.measureText(data.courseName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - courseWidth/2 - 20, 465);
-  ctx.lineTo(561 + courseWidth/2 + 20, 465);
+  ctx.moveTo(561 - courseWidth/2 - 20, 515);
+  ctx.lineTo(561 + courseWidth/2 + 20, 515);
   ctx.stroke();
 
   // "under the instruction of" text
   ctx.font = 'italic 20px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('under the instruction of', 561, 525);
+  ctx.fillText('under the instruction of', 561, 575);
 
   // Lecturer name
   ctx.font = 'bold 28px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.lecturerName, 561, 570);
+  ctx.fillText(data.lecturerName, 561, 620);
 
   // Issue date
   ctx.font = 'italic 20px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
   const formattedDate = formatDate(data.issueDate);
-  ctx.fillText(`Issued on: ${formattedDate}`, 561, 680);
+  ctx.fillText('Issued on: ' + formattedDate, 561, 680);
 
   // Signature line
   ctx.strokeStyle = '#1a1a2e';
@@ -694,7 +828,7 @@ function handleGeneratePdf() {
 function generatePdfFromData(data) {
   const canvas = document.getElementById('certificateCanvas');
   const imgData = canvas.toDataURL('image/png', 1.0);
-  
+
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({
     orientation: 'landscape',
@@ -704,9 +838,9 @@ function generatePdfFromData(data) {
 
   // Add image to PDF
   pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
-  
+
   // Create filename
-  const filename = sanitizeFilename(`${data.courseName}_${data.studentName}.pdf`);
+  const filename = sanitizeFilename(data.courseName + '_' + data.studentName + '.pdf');
   pdf.save(filename);
 }
 
@@ -715,7 +849,8 @@ function sanitizeFilename(filename) {
   return filename
     .replace(/[^a-z0-9_\-\.]/gi, '_')
     .replace(/_+/g, '_')
-    .replace(/^_|_$/g, '');
+    .replace(/^_|_$/g, '')
+    .toLowerCase();
 }
 
 // Download sample CSV
@@ -728,7 +863,7 @@ function downloadSampleCsv() {
   ];
 
   const csv = csvContent.map(row => 
-    row.map(cell => `"${cell}"`).join(',')
+    row.map(cell => '"' + cell + '"').join(',')
   ).join('\n');
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -736,7 +871,7 @@ function downloadSampleCsv() {
   link.href = URL.createObjectURL(blob);
   link.download = 'certificate_template.csv';
   link.click();
-  
+
   showToast('Sample CSV downloaded', 'success');
 }
 
@@ -755,13 +890,18 @@ function handleCsvUpload(e) {
         return;
       }
 
+      if (!results.data || results.data.length === 0) {
+        showToast('CSV file is empty', 'error');
+        return;
+      }
+
       // Validate CSV structure
       const requiredColumns = ['Student Name', 'Course Name', 'Lecturer Name', 'Issue Date', 'Certificate Type'];
       const headers = Object.keys(results.data[0] || {});
       const missingColumns = requiredColumns.filter(col => !headers.includes(col));
 
       if (missingColumns.length > 0) {
-        showToast(`Missing required columns: ${missingColumns.join(', ')}`, 'error');
+        showToast('Missing required columns: ' + missingColumns.join(', '), 'error');
         return;
       }
 
@@ -779,7 +919,7 @@ function handleCsvUpload(e) {
 
       state.csvData = validData;
       displayCsvPreview(validData);
-      showToast(`${validData.length} certificates ready to generate`, 'success');
+      showToast(validData.length + ' certificates ready to generate', 'success');
     },
     error: function(error) {
       showToast('Error reading CSV file', 'error');
@@ -795,19 +935,17 @@ function displayCsvPreview(data) {
 
   data.forEach((row, index) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${escapeHtml(row['Student Name'])}</td>
-      <td>${escapeHtml(row['Course Name'])}</td>
-      <td>${escapeHtml(row['Lecturer Name'])}</td>
-      <td>${row['Issue Date']}</td>
-      <td><span class="status status--info">${escapeHtml(row['Certificate Type'])}</span></td>
-    `;
+    tr.innerHTML = '<td>' + (index + 1) + '</td>' +
+      '<td>' + escapeHtml(row['Student Name']) + '</td>' +
+      '<td>' + escapeHtml(row['Course Name']) + '</td>' +
+      '<td>' + escapeHtml(row['Lecturer Name']) + '</td>' +
+      '<td>' + row['Issue Date'] + '</td>' +
+      '<td>' + escapeHtml(row['Certificate Type']) + '</td>';
     tbody.appendChild(tr);
   });
 
-  document.getElementById('certificateCount').textContent = data.length;
-  document.getElementById('csvPreviewSection').classList.remove('hidden');
+  document.getElementById('csvCount').textContent = data.length;
+  document.getElementById('csvPreviewContainer').classList.remove('hidden');
 }
 
 // Escape HTML to prevent XSS
@@ -826,20 +964,17 @@ async function handleGenerateBulk() {
 
   const btn = document.getElementById('generateBulkBtn');
   const originalText = btn.innerHTML;
-  btn.innerHTML = '<span class="loading-spinner"></span>Generating...';
+  btn.innerHTML = 'Generating...';
   btn.disabled = true;
+
+  document.getElementById('progressContainer').style.display = 'block';
 
   try {
     const zip = new JSZip();
     const { jsPDF } = window.jspdf;
+    const totalCerts = state.csvData.length;
 
-    // Create a temporary canvas for bulk generation
-    const tempCanvas = document.createElement('canvas');
-    const scale = 3;
-    tempCanvas.width = 1122 * scale;
-    tempCanvas.height = 794 * scale;
-
-    for (let i = 0; i < state.csvData.length; i++) {
+    for (let i = 0; i < totalCerts; i++) {
       const row = state.csvData[i];
       const certData = {
         studentName: row['Student Name'],
@@ -849,15 +984,16 @@ async function handleGenerateBulk() {
         certificateType: row['Certificate Type']
       };
 
-      // Draw certificate on temp canvas
+      // Create temporary canvas for this certificate
+      const tempCanvas = document.createElement('canvas');
+      const scale = 3;
+      tempCanvas.width = 1122 * scale;
+      tempCanvas.height = 794 * scale;
       const ctx = tempCanvas.getContext('2d');
-      ctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-      ctx.save();
       ctx.scale(scale, scale);
-      
-      // Draw certificate (reusing the same drawing logic)
-      drawCertificateOnContext(ctx, certData);
-      ctx.restore();
+
+      // Draw certificate on temporary canvas
+      drawCertificateOnCanvas(ctx, certData);
 
       // Convert to PDF
       const imgData = tempCanvas.toDataURL('image/png', 1.0);
@@ -867,11 +1003,17 @@ async function handleGenerateBulk() {
         format: 'a4'
       });
       pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
-      
+
       // Add to ZIP
-      const filename = sanitizeFilename(`${certData.courseName}_${certData.studentName}.pdf`);
+      const filename = sanitizeFilename(certData.courseName + '_' + certData.studentName + '.pdf');
       const pdfBlob = pdf.output('blob');
       zip.file(filename, pdfBlob);
+
+      // Update progress
+      const progress = Math.round(((i + 1) / totalCerts) * 100);
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressFill').textContent = progress + '%';
+      document.getElementById('progressText').textContent = 'Generating certificate ' + (i + 1) + ' of ' + totalCerts + '...';
     }
 
     // Generate ZIP and download
@@ -881,18 +1023,19 @@ async function handleGenerateBulk() {
     link.download = 'certificates.zip';
     link.click();
 
-    showToast(`Successfully generated ${state.csvData.length} certificates!`, 'success');
+    showToast('Successfully generated ' + totalCerts + ' certificates!', 'success');
   } catch (error) {
     showToast('Error generating certificates', 'error');
     console.error(error);
   } finally {
     btn.innerHTML = originalText;
     btn.disabled = false;
+    document.getElementById('progressContainer').style.display = 'none';
   }
 }
 
-// Draw certificate on a given context (for bulk generation)
-function drawCertificateOnContext(ctx, data) {
+// Draw certificate on canvas (for bulk generation)
+function drawCertificateOnCanvas(ctx, data) {
   // Background
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, 1122, 794);
@@ -910,73 +1053,86 @@ function drawCertificateOnContext(ctx, data) {
   // Decorative corners
   drawDecorativeCorners(ctx);
 
+  // Draw logo if available
+  if (logoImage && logoImage.complete) {
+    try {
+      const logoX = 561 - 60;
+      const logoY = 50;
+      const logoWidth = 120;
+      const logoHeight = 120;
+      ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
+    } catch(e) {
+      console.warn('Error drawing logo:', e);
+    }
+  }
+
   // Certificate title
   ctx.fillStyle = '#1a1a2e';
   ctx.font = 'bold 52px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Certificate of ${data.certificateType}`, 561, 140);
+  ctx.fillText('Certificate of ' + data.certificateType, 561, 200);
 
   // Decorative line under title
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(361, 160);
-  ctx.lineTo(761, 160);
+  ctx.moveTo(361, 220);
+  ctx.lineTo(761, 220);
   ctx.stroke();
 
   // "This certifies that" text
   ctx.fillStyle = '#1a1a2e';
   ctx.font = 'italic 24px Georgia, serif';
-  ctx.fillText('This certifies that', 561, 240);
+  ctx.fillText('This certifies that', 561, 290);
 
   // Student name (prominent)
   ctx.font = 'bold 48px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.studentName, 561, 310);
+  ctx.fillText(data.studentName, 561, 360);
 
   // Underline for name
   const nameWidth = ctx.measureText(data.studentName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - nameWidth/2 - 20, 325);
-  ctx.lineTo(561 + nameWidth/2 + 20, 325);
+  ctx.moveTo(561 - nameWidth/2 - 20, 375);
+  ctx.lineTo(561 + nameWidth/2 + 20, 375);
   ctx.stroke();
 
   // "has successfully completed" text
   ctx.font = 'italic 22px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('has successfully completed the course', 561, 390);
+  ctx.fillText('has successfully completed the course', 561, 440);
 
   // Course name
   ctx.font = 'bold 36px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.courseName, 561, 450);
+  ctx.fillText(data.courseName, 561, 500);
 
   // Underline for course
   const courseWidth = ctx.measureText(data.courseName).width;
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(561 - courseWidth/2 - 20, 465);
-  ctx.lineTo(561 + courseWidth/2 + 20, 465);
+  ctx.moveTo(561 - courseWidth/2 - 20, 515);
+  ctx.lineTo(561 + courseWidth/2 + 20, 515);
   ctx.stroke();
 
   // "under the instruction of" text
   ctx.font = 'italic 20px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText('under the instruction of', 561, 525);
+  ctx.fillText('under the instruction of', 561, 575);
 
   // Lecturer name
   ctx.font = 'bold 28px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
-  ctx.fillText(data.lecturerName, 561, 570);
+  ctx.fillText(data.lecturerName, 561, 620);
 
   // Issue date
   ctx.font = 'italic 20px Georgia, serif';
   ctx.fillStyle = '#1a1a2e';
   const formattedDate = formatDate(data.issueDate);
-  ctx.fillText(`Issued on: ${formattedDate}`, 561, 680);
+  ctx.fillText('Issued on: ' + formattedDate, 561, 680);
 
   // Signature line
   ctx.strokeStyle = '#1a1a2e';
@@ -992,17 +1148,20 @@ function drawCertificateOnContext(ctx, data) {
 }
 
 // Show toast notification
-function showToast(message, type = 'info') {
+function showToast(message, type) {
+  if (!type) type = 'info';
+
   const container = document.getElementById('toastContainer');
-  
+  if (!container) return;
+
   const toast = document.createElement('div');
-  toast.className = `toast status status--${type}`;
+  toast.className = 'toast ' + type;
   toast.textContent = message;
-  
+
   container.appendChild(toast);
-  
+
   setTimeout(() => {
-    toast.style.animation = 'slideIn 0.3s var(--ease-standard) reverse';
+    toast.style.animation = 'slideIn 0.3s ease reverse';
     setTimeout(() => toast.remove(), 300);
   }, 3000);
 }
@@ -1013,9 +1172,6 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
-
-        // Initialize app when DOM is ready
-        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
