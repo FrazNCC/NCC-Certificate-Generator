@@ -723,6 +723,30 @@ function drawCertificateImpl(canvas, data, scale) {
     ctx.scale(scale, scale);
     drawCertificateCore(ctx, data);
 }
+function drawNCCSeal(ctx, cx, cy, r) {
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // Hexagon
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 2; // starts at the top
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+
+    // Fill + border
+    ctx.fillStyle = '#d4af37';
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#b8860b';
+    ctx.stroke();
+
+    ctx.restore();
+}
 
 function drawCertificateCore(ctx, data) {
     // Background
@@ -822,6 +846,8 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.fillStyle = '#1a1a2e'; 
     ctx.fillText('Issued: ' + data.issueDate, 70, 720);
 
+    // NCC SEAL at bottom/center
+    drawNCCSeal(ctx, 561, 678, 55);
 }
 
 // ========== UTILITY ==========
