@@ -805,23 +805,22 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.lineTo(561 + courseWidth/2 + 15, 540);
     ctx.stroke();
 
-    // Lecturer label (bottom-right block)
-    ctx.fillStyle = '#1a1a2e';
+    // Lecturer text 
+    ctx.fillStyle = '#1a1a2e'; 
     ctx.textAlign = 'right';
-
-    // Lecturer text
-    ctx.font = 'italic 25px Georgia, serif';
-    ctx.fillText('under the instruction of', 1050, 720);  // adjust X to right edge
-
-    // Lecturer name
-    ctx.font = 'bold 35px Georgia, serif';
-    ctx.fillText(data.lecturerName, 1050, 760);  // same right edge alignment
-
-    // Date (bottom-left)
+    ctx.font = 'italic 20px Georgia, serif'; 
+    ctx.fillText('under the instruction of', 561, 720); 
+    
+    // Lecturer name 
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 35px Georgia, serif'; 
+    ctx.fillText(data.lecturerName, 561, 630); 
+    
+    // Date 
     ctx.textAlign = 'left';
-    ctx.font = 'italic 30px Georgia, serif';
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillText('Issued: ' + formattedDate, 70, 760);   // adjust X to left edge
+    ctx.font = 'italic 30px Georgia, serif'; 
+    ctx.fillStyle = '#1a1a2e'; 
+    ctx.fillText('Issued: ' + data.issueDate, 561, 720);
 
 }
 
