@@ -739,67 +739,38 @@ function drawHexPath(ctx, r) {
 function drawScroll(ctx, cx, cy, size) {
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.strokeStyle = '#d4af37';   // gold (same as hat)
+    ctx.strokeStyle = '#d4af37';   // gold
     ctx.lineWidth = 4;
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
-    const w = size * 2;      // overall width of scroll
-    const h = size * 0.6;    // height of scroll
-    const r = h * 0.45;      // radius for rolled end
+    const w = size * 2;     // width of scroll
+    const h = size * 0.6;   // height
 
-    // ---- Main scroll body (rectangle) ----
+    // ---- Main rectangle ----
     ctx.beginPath();
-    ctx.moveTo(-w / 2, -h / 2);
-    ctx.lineTo(w / 2, -h / 2);
-    ctx.lineTo(w / 2,  h / 2);
-    ctx.lineTo(-w / 2,  h / 2);
-    ctx.closePath();
+    ctx.rect(-w/2, -h/2, w, h);
     ctx.stroke();
 
-    // ---- Rolled left end (spiral) ----
-    const rollCenterX = -w / 2;
-    const rollCenterY = 0;
-
-    // Outer arc
+    // ---- Rolled left side (simple circle) ----
     ctx.beginPath();
-    ctx.arc(rollCenterX, rollCenterY, r, Math.PI / 2, Math.PI * 3/2, true);
+    ctx.arc(-w/2, 0, h/2, Math.PI/2, Math.PI*3/2);
     ctx.stroke();
 
-    // Inner arc
+    // ---- Ribbon (simple V-shape) ----
     ctx.beginPath();
-    ctx.arc(rollCenterX, rollCenterY, r * 0.55, Math.PI / 2, Math.PI * 3/2, true);
+    ctx.moveTo(0, -h/2);
+    ctx.lineTo(0, h/2);
     ctx.stroke();
 
-    // ---- Ribbon band in the middle ----
-    const bandWidth = size * 0.3;
     ctx.beginPath();
-    ctx.moveTo(-bandWidth / 2, -h / 2);
-    ctx.lineTo(-bandWidth / 2,  h / 2);
-    ctx.moveTo(bandWidth / 2,  -h / 2);
-    ctx.lineTo(bandWidth / 2,   h / 2);
-    ctx.stroke();
-
-    // ---- Ribbon tails ----
-    const tailLen = size * 0.4;
-
-    // Left tail
-    ctx.beginPath();
-    ctx.moveTo(-bandWidth / 2, h / 2);
-    ctx.lineTo(-bandWidth / 2 - tailLen * 0.4, h / 2 + tailLen);
-    ctx.lineTo(-bandWidth / 2 + tailLen * 0.2, h / 2);
-    ctx.stroke();
-
-    // Right tail
-    ctx.beginPath();
-    ctx.moveTo(bandWidth / 2, h / 2);
-    ctx.lineTo(bandWidth / 2 + tailLen * 0.4, h / 2 + tailLen);
-    ctx.lineTo(bandWidth / 2 - tailLen * 0.2, h / 2);
+    ctx.moveTo(0, h/2);
+    ctx.lineTo(size * 0.3, h/2 + size * 0.4);
+    ctx.lineTo(-size * 0.3, h/2);
     ctx.stroke();
 
     ctx.restore();
 }
-
 
 function drawCertificateCore(ctx, data) {
     // Background
@@ -899,11 +870,10 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
     ctx.fillStyle = '#1a1a2e'; 
     ctx.fillText('Issued: ' + data.issueDate, 70, 720);
 
-    // Hat
+    // Hat with scroll under it
     drawScholarHat(ctx, 561, 650, 55);
+    drawScroll(ctx, 561, 720, 35);
 
-    // Scroll just under it
-    drawScroll(ctx, 561, 730, 35);
 
 }
 
