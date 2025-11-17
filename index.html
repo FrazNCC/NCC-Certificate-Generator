@@ -794,25 +794,25 @@ ctx.fillText(titleText, 561, 250);           // uppercase text
 
     // Course name
     ctx.font = 'bold 32px Georgia, serif';
-    ctx.fillText(data.courseName, 561, 500);
+    ctx.fillText(data.courseName, 561, 520);
 
     // Course underline
     const courseWidth = ctx.measureText(data.courseName).width;
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(561 - courseWidth/2 - 15, 520);
-    ctx.lineTo(561 + courseWidth/2 + 15, 520);
+    ctx.moveTo(561 - courseWidth/2 - 15, 540);
+    ctx.lineTo(561 + courseWidth/2 + 15, 540);
     ctx.stroke();
 
     // Lecturer text
     ctx.fillStyle = '#1a1a2e';
     ctx.font = 'italic 25px Georgia, serif';
-    ctx.fillText('under the instruction of', 561, 570);
+    ctx.fillText('under the instruction of', 561, 590);
 
     // Lecturer name
     ctx.font = 'bold 35px Georgia, serif';
-    ctx.fillText(data.lecturerName, 561, 590);
+    ctx.fillText(data.lecturerName, 561, 630);
 
     // Date
     ctx.font = 'italic 30px Georgia, serif';
