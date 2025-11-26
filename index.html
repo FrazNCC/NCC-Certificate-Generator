@@ -534,7 +534,7 @@ function generateSinglePdf() {
         format: 'a4'
     });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+    pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
 
     const studentName = document.getElementById('studentName').value;
     const courseName = document.getElementById('courseName').value;
@@ -672,13 +672,13 @@ async function generateAllPdfs() {
             drawCertificateOnCanvas(ctx, cert);
 
             // Convert to PDF
-            const imgData = tempCanvas.toDataURL('image/png'.0.5);
+            const imgData = tempCanvas.toDataURL('image/png',0.5);
             const pdf = new jsPDF({
                 orientation: 'landscape',
                 unit: 'mm',
                 format: 'a4'
             });
-            pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+            pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
 
             // Add to ZIP
             const filename = (cert.courseName + '_' + cert.studentName).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
