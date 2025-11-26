@@ -663,10 +663,10 @@ async function generateAllPdfs() {
 
             // Create canvas for this certificate
             const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = 3366;  // 1122 * 3
-            tempCanvas.height = 2382; // 794 * 3
+            tempCanvas.width = 3366;  // 900 * 3
+            tempCanvas.height = 2382; // 665 * 3
             const ctx = tempCanvas.getContext('2d');
-            ctx.scale(3, 3);
+            ctx.scale(1, 1);
 
             // Draw certificate
             drawCertificateOnCanvas(ctx, cert);
@@ -726,10 +726,10 @@ function drawCertificateOnCanvas(ctx, data) {
 }
 
 function drawCertificateImpl(canvas, data, scale) {
-    canvas.width = 1122 * scale;
-    canvas.height = 794 * scale;
+    canvas.width = 900 * scale;
+    canvas.height = 665 * scale;
     const ctx = canvas.getContext('2d');
-    ctx.scale(scale, scale);
+    ctx.scale(1, 1);
     drawCertificateCore(ctx, data);
 }
 // Helper: draws a hexagon path centred at (0,0) with radius r
