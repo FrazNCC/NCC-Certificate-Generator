@@ -752,24 +752,23 @@ function drawCertificateCore(ctx, data) {
     // Outer gold border
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 12;
-    ctx.strokeRect(30, 30, 1062, 734);
+    ctx.strokeRect(30, 30, 760, 525);
 
     // Inner border
     ctx.strokeStyle = '#b8860b';
     ctx.lineWidth = 2;
-    ctx.strokeRect(45, 45, 1032, 704);
+    ctx.strokeRect(45, 45, 730, 495);
 
     // Draw logo
     if (logoImage && logoImage.complete) {
         try {
-            const logoMaxSize = 300;
+            const logoMaxSize = 200;
             const ratio = logoImage.width / logoImage.height;
             let w = logoMaxSize, h = logoMaxSize;
-
             if (ratio > 1) h = w / ratio;
             else w = h * ratio;
 
-            ctx.drawImage(logoImage, 561 - w/2, 60, w, h);
+            ctx.drawImage(logoImage, 450 - w/2, 50, w, h);
         } catch(e) {}
     }
 
