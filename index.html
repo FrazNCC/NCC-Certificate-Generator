@@ -525,7 +525,7 @@ function handlePreview(e) {
 
 function generateSinglePdf() {
     const canvas = document.getElementById('certificateCanvas');
-    const imgData = canvas.toDataURL('image/png',0.5);
+    const imgData = canvas.toDataURL('image/jpeg', 0.5);
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
@@ -663,16 +663,16 @@ async function generateAllPdfs() {
 
             // Create canvas for this certificate
             const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = 3366;  // 1122 * 3
-            tempCanvas.height = 2382; // 794 * 3
+            tempCanvas.width = 800;
+            tempCanvas.height = 565;
             const ctx = tempCanvas.getContext('2d');
-            ctx.scale(3, 3);
+
 
             // Draw certificate
             drawCertificateOnCanvas(ctx, cert);
 
             // Convert to PDF
-            const imgData = tempCanvas.toDataURL('image/png',0.5);
+            const imgData = tempCanvas.toDataURL('image/jpeg', 0.5);
             const pdf = new jsPDF({
                 orientation: 'landscape',
                 unit: 'mm',
@@ -718,18 +718,17 @@ async function generateAllPdfs() {
 // ========== DRAWING FUNCTIONS ==========
 function drawCertificate(data) {
     const canvas = document.getElementById('certificateCanvas');
-    drawCertificateImpl(canvas, data, 3);
+    drawCertificateImpl(canvas, data);
 }
 
 function drawCertificateOnCanvas(ctx, data) {
     drawCertificateCore(ctx, data);
 }
 
-function drawCertificateImpl(canvas, data, scale) {
-    canvas.width = 1122 * scale;
-    canvas.height = 794 * scale;
+function drawCertificateImpl(canvas, data) {
+    canvas.width = 800;
+    canvas.height = 565;
     const ctx = canvas.getContext('2d');
-    ctx.scale(scale, scale);
     drawCertificateCore(ctx, data);
 }
 // Helper: draws a hexagon path centred at (0,0) with radius r
